@@ -6,9 +6,6 @@ const router = Router();
 
 // })
 
-// router.get('/:cid', (req, res) => {
-
-// })
 
 router.get('/', async (req, res) => {
     try {
