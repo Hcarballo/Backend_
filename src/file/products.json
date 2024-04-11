@@ -1,0 +1,52 @@
+[
+	{
+		"id": 1,
+		"title": "producto prueba",
+		"description": "Este es un producto prueba",
+		"price": 200,
+		"thumbnail": "sin imagen",
+		"code": "abc124",
+		"stock": 25,
+		"status": true
+	},
+	{
+		"id": 2,
+		"title": "producto actualizado",
+		"description": "Este es un producto prueba",
+		"price": 200,
+		"thumbnail": "sin imagen",
+		"code": "abc125",
+		"stock": 25,
+		"status": true
+	},
+	{
+		"id": 3,
+		"title": "Actualización x Put",
+		"description": "Prueba desde Post3",
+		"price": 500,
+		"thumbnail": "Sin Imagen",
+		"code": "abc340",
+		"stock": 39990,
+		"status": false
+	},
+	{
+		"id": 5,
+		"title": "Carga x Post",
+		"description": "Prueba desde Post",
+		"price": 500,
+		"thumbnail": "Sin Imagen",
+		"code": "abc334",
+		"stock": 100,
+		"status": true
+	},
+	{
+		"id": 6,
+		"title": "Carga x Post2",
+		"description": "Prueba desde Post2",
+		"price": 500,
+		"thumbnail": "Sin Imagen",
+		"code": "abc338",
+		"stock": 500,
+		"status": true
+	}
+]
