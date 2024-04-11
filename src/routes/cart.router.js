@@ -2,10 +2,6 @@ import { Router } from 'express';
 import CartManager from '../managers/cartsManager.js';
 const router = Router();
 
-// router.get('/', (req, res) => {
-
-// })
-
 
 router.get('/', async (req, res) => {
     try {
