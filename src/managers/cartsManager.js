@@ -52,10 +52,8 @@ export default class CartManager {
                 console.log('No hay carritos disponibles');
                 return;
             }
-
             
-            const cartActual = carts.find(c => c.cid === cId);
-           
+            const cartActual = carts.find(c => c.cid === cId);           
 
             if (!cartActual) {
                 console.log(`No se encontró ningún carrito con el id ${cId}`);
@@ -105,7 +103,6 @@ export default class CartManager {
     #read_File = async (path) => {
         try {
             const datajson = await fs.promises.readFile(path, 'utf-8');
-            console.log(`Pase por el read file ${datajson}`)
             return JSON.parse(datajson);
         }
         catch {
