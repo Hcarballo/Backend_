@@ -16,11 +16,9 @@ router.get('/', async (req, res) => {
 
 router.post('/:cid', async (req, res) => {
     try {
-        const cid = JSON.stringify(req.params);
+        const cid = JSON.stringify(req.params.cid);
         const { pid, quantity } = req.body;
-
-        console.log(`Router ${cid}, ${Number(pid)}, ${Number(quantity)}`);
-
+        
         const classManager = new CartManager();
 
         await classManager.add_productCart(cid, pid, quantity);
@@ -30,23 +28,5 @@ router.post('/:cid', async (req, res) => {
         console.log(error);
     }
 })
-
-
-// router.put('/:cid', (req, res) => {
-//  const newCart = new CartManager();
-//  if (!product || !quantity || quantity <= 0) return res.send();
-//  try {
-//      newCart.add_productCart(product, quantity);
-//     res.status(200).send({ status: 'success' });
-//  } catch (error){
-//      console.log(error);
-//  } 
-// })
-
-// router.delete('/:cid', (req, res) => {
-
-// })
-
-
 
 export default router;
