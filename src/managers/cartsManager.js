@@ -1,6 +1,5 @@
 import fs from 'fs';
 import ProductsManager from './productsManager.js';
-import { json } from 'express';
 
 export default class CartManager {
     #path;
@@ -38,9 +37,9 @@ export default class CartManager {
 
     /**
      * 
-     * @param {String} cId 
-     * @param {Number} pId 
-     * @param {Number} quantity 
+     * @param {string} cId 
+     * @param {number} pId 
+     * @param {number} quantity 
      * @returns 
      */
 
@@ -52,8 +51,8 @@ export default class CartManager {
                 console.log('No hay carritos disponibles');
                 return;
             }
-            
-            const cartActual = carts.find(c => c.cid === cId);           
+
+            const cartActual = carts.find(item => item.cid === cId);
 
             if (!cartActual) {
                 console.log(`No se encontró ningún carrito con el id ${cId}`);
@@ -65,39 +64,94 @@ export default class CartManager {
 
             const priceProduct = findproduct.price;
 
-            const product = {
-                item: 0,
-                pid: pId,
-                quantity: quantity,
-                unitPrice: priceProduct,
-                subtotal: priceProduct * quantity
-            }
+            const productInCart = cartActual.products.find(p => p.pid === pId);
 
-            if (cartActual.products.length === 0) {
-                product.item = 1;
+            if (productInCart) {
+
+                productInCart.quantity += quantity;
+                productInCart.subtotal += priceProduct * quantity;
+
             } else {
-                product.item = cartActual.products[cartActual.products.length - 1].item + 1;
+
+                const product = {
+                    item: cartActual.products.length + 1,
+                    pid: pId,
+                    quantity: quantity,
+                    unitPrice: priceProduct,
+                    subtotal: priceProduct * quantity
+                }
+                cartActual.products.push(product);
             }
 
-            cartActual.total = total + priceProduct * quantity;
-            cartActual.products.push(product);
-
-            await fs.promises.writeFile(this.#path, JSON.stringify(cartActual, null, '\t'));
+            cartActual.total = cartActual.total + priceProduct * quantity;
+            await fs.promises.writeFile(this.#path, JSON.stringify(carts, null, '\t'));
             console.log("Producto Agregado");
         } catch (error) {
             console.log(error);
         }
     }
 
+    list_products = async (cId) => {
+        try {
+            const carts = await this.#read_File(this.#path);
+    
+            if (!Array.isArray(carts) || carts.length === 0) {
+                console.log('No hay carritos disponibles');
+                return;
+            }
+    
+            const cartActual = carts.find(item => item.cid === cId);
+    
+            if (!cartActual) {
+                console.log(`No se encontró ningún carrito con el id ${cId}`);
+                return;
+            }
+    
+            if (cartActual.products.length === 0) {
+                console.log(`El carrito con el id ${cId} no tiene productos`);
+                return;
+            }
+    
+            console.log(`Productos en el carrito ${cId}:`);
+            cartActual.products.forEach(product => {
+                console.log(`Item: ${product.item}, Código producto: ${product.pid}, Cantidad: ${product.quantity}, Precio Unitario: ${product.unitPrice}, Subtotal: ${product.subtotal}`);
+            });
+            console.log(`Total: $${cartActual.total}`)
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
 
-    delete_productCart = async (product) => {
+    delete_cart = async (cId) => {
+        try {
+            const carts = await this.#read_File(this.#path);
 
+            if (!Array.isArray(carts) || carts.length === 0) {
+                console.log('No hay carritos disponibles');
+                return;
+            }
+
+            const index = carts.findIndex(item => item.cid === cId);
+
+            if (index === -1) {
+                console.log(`No se encontró ningún carrito con el id ${cId}`);
+                return;
+            }
+
+            carts.splice(index, 1);
+
+            await fs.promises.writeFile(this.#path, JSON.stringify(carts, null, '\t'));
+            console.log("Carrito eliminado");
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     generateId = () => {
         const timestamp = Date.now();
         const numberId = Math.floor(Math.random() * 10000);
-        return `${timestamp}-${numberId}`;
+        return ((`${timestamp}-${numberId}`).toString());
     }
 
     #read_File = async (path) => {

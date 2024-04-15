@@ -5,7 +5,6 @@ const router = Router();
 const classproducts = new ProductsManager();
 
 router.get('/', async (req, res) => {
-    //const classproducts = new ProductsManager();
     const { limit } = req.query;
     try {
         const products = await classproducts.getProducts();
@@ -22,7 +21,6 @@ router.get('/', async (req, res) => {
 
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params;
-    //const classproducts = new ProductsManager();
     try {
         const product = await classproducts.getProductsById(parseInt(pid));
         if (!product) {
@@ -72,8 +70,6 @@ router.put('/:pid', async (req, res) => {
         status
     } = req.body;
 
-    console.log(`${req.params.pid} - ${JSON.stringify(req.body)}`)
-
     if (!title || !description || !price || !thumbnail || !code || !stock || status == undefined) {
         return res.send();
     }
@@ -99,7 +95,5 @@ console.log(product);
    }
 
 })
-
-
 
 export default router;

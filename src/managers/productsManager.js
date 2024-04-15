@@ -126,17 +126,3 @@ export default class ProductsManager {
         }
     }
 }
-
-// testing--------------------------------------------------
-
-//const productos = new ProductsManager();
-// productos.getProducts();
-//productos.addProducts("producto prueba", "Este es un producto prueba", 200, "sin imagen", "abc123", 25)
-//productos.getProducts();
-//productos.addProducts("producto prueba", "Este es un producto prueba", 200, "sin imagen", "abc124", 25)
-//productos.getProducts();
-//productos.getProductsById(1);
-//productos.deleteProduct(1);
-//productos.addProducts("producto prueba", "Este es un producto prueba", 200, "sin imagen", "abc125", 25)
-//productos.updateProduct({id:2, title: "producto actualizado", description: "Este es un producto prueba", price: 200, thumbnail: "sin imagen", code: "abc125", stock: 25 })
-
