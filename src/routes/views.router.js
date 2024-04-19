@@ -14,8 +14,11 @@ router.get('/', async (req, res) => {
     });
 })
 
-router.get('/realtimeproducts', (req,res)=>{
-res.render('realTimeProducts',{})
+router.get('/realtimeproducts', async (req,res)=>{
+    const products = await classproducts.getProducts();
+res.render('realTimeProducts',{
+    products,
+})
 })
 
 export default router

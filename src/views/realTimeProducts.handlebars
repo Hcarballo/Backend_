@@ -1,17 +1,36 @@
 <div>
     <h1>Listado de Productos WebSocket</h1>
-    {{!-- {{#each products}}
+    {{#each products}}
     <div>
         <p>id: {{this.id}}</p>
         <p>title: {{this.title}}</p>
         <p>description: {{this.description}}</p>
         <p>price: ${{this.price}}</p>
     </div>
-    {{/each}} --}}
+    {{/each}}
 </div>
-{{!-- <script src="/node_modules/socket.io/client-dist/socket.io.js"></script>
-<script src="/src/public/js/realtimeproducts.js"></script> --}}
+<div>
+    <h2>Ingresar producto</h2>
+</div>
+<div>
+    <form action="" method="POST">
+        <label for="title">Título:</label><br>
+        <input type="text" id="title" name="title"><br>
+        <label for="description">Descripción:</label><br>
+        <input type="text" id="description" name="description"><br>
+        <label for="price">Precio:</label><br>
+        <input type="number" id="price" name="price" step="1" min="0"><br>
+        <label for="thumbnail">Imagen:</label><br>
+        <input type="text" id="thumbnail" name="thumbnail"><br>
+        <label for="code">Código:</label><br>
+        <input type="text" id="code" name="code"><br>
+        <label for="stock">Stock:</label><br>
+        <input type="number" id="stock" name="stock" min="0"><br>
+        <label for="status">Estado:</label><br>
+        <input type="checkbox" id="status" name="status"><br>
+        <input type="submit" value="Cargar Producto">
+    </form>
+</div>
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realtimeproducts.js"></script>
-
-{{!-- No me vincula los script --}}
