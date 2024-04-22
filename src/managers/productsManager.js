@@ -36,8 +36,7 @@ export default class ProductsManager {
             const checkProductCode = listProducts.find(p => p.code === product.code);
 
             if (checkProductCode) {
-                console.log(`El código ${product.code} ya existe`);
-                return `El código ${product.code} ya existe`;
+                return(`El código ${product.code} ya existe`);
             }
 
             if (listProducts.length === 0) {
@@ -47,8 +46,8 @@ export default class ProductsManager {
             }
 
             listProducts.push(product);
-            await fs.promises.writeFile(this.#path, JSON.stringify(listProducts, null, '\t'), 'utf-8');
-            console.log("Producto Agregado");
+            await fs.promises.writeFile(this.#path, JSON.stringify(listProducts, null, '\t'), 'utf-8');            
+            return("Producto Agregado");
         }
         catch (error) {
             console.log(error);
@@ -57,8 +56,7 @@ export default class ProductsManager {
 
     getProducts = async () => {
         try {
-            const listProducts = await this.#read_File(this.#path);
-            console.log(listProducts);
+            const listProducts = await this.#read_File(this.#path);          
             return listProducts;
         } catch (error) {
             console.log(error);
@@ -90,9 +88,10 @@ export default class ProductsManager {
                 listProducts.splice(product, 1);
                 await fs.promises.writeFile(this.#path, JSON.stringify(listProducts, null, '\t'), 'utf-8');
                 console.log('Producto Eliminado');
-                return;
+                return(true);
             } else {
                 console.log('El producto que intenta eliminar no existe');
+                return(false)
             }
         } catch (error) {
             console.log(error);

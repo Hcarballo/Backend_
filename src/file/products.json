@@ -30,23 +30,43 @@
 		"status": false
 	},
 	{
+		"id": 4,
+		"title": "PRUEBA",
+		"description": "PRUEBA",
+		"price": "300",
+		"thumbnail": "sin imagen",
+		"code": "ABCD234",
+		"stock": "30",
+		"status": true
+	},
+	{
 		"id": 5,
-		"title": "Carga x Post",
-		"description": "Prueba desde Post",
-		"price": 500,
-		"thumbnail": "Sin Imagen",
-		"code": "abc334",
-		"stock": 100,
+		"title": "lkmlkm",
+		"description": "lkmlmlk",
+		"price": "999",
+		"thumbnail": "lmlml",
+		"code": "9mlml",
+		"stock": "78",
 		"status": true
 	},
 	{
 		"id": 6,
-		"title": "Carga x Post2",
-		"description": "Prueba desde Post2",
-		"price": 500,
-		"thumbnail": "Sin Imagen",
-		"code": "abc338",
-		"stock": 500,
+		"title": "lkml",
+		"description": "lkm",
+		"price": "99",
+		"thumbnail": "lkml",
+		"code": "abc123",
+		"stock": "20",
+		"status": true
+	},
+	{
+		"id": 7,
+		"title": "kjkjn",
+		"description": "kjnkjn",
+		"price": "8888",
+		"thumbnail": "kmlm",
+		"code": "dddk90",
+		"stock": "20",
 		"status": true
 	}
 ]

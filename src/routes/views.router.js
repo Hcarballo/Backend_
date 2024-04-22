@@ -14,11 +14,12 @@ router.get('/', async (req, res) => {
     });
 })
 
-router.get('/realtimeproducts', async (req,res)=>{
+router.get('/realTimeProducts', async (req, res) => {
     const products = await classproducts.getProducts();
-res.render('realTimeProducts',{
-    products,
-})
+    res.render('realTimeProducts', {
+        title: "Listado de productos WebSocket",
+        products,
+    })
 })
 
 export default router

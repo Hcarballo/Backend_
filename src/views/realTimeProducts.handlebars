@@ -1,5 +1,5 @@
 <div>
-    <h1>Listado de Productos WebSocket</h1>
+    <h1>{{title}}</h1>
     {{#each products}}
     <div>
         <p>id: {{this.id}}</p>
@@ -13,7 +13,7 @@
     <h2>Ingresar producto</h2>
 </div>
 <div>
-    <form action="" method="POST">
+    <form method="post">
         <label for="title">Título:</label><br>
         <input type="text" id="title" name="title"><br>
         <label for="description">Descripción:</label><br>
@@ -26,11 +26,23 @@
         <input type="text" id="code" name="code"><br>
         <label for="stock">Stock:</label><br>
         <input type="number" id="stock" name="stock" min="0"><br>
-        <label for="status">Estado:</label><br>
-        <input type="checkbox" id="status" name="status"><br>
-        <input type="submit" value="Cargar Producto">
+       
+        <input id="btn_addproduct" type="submit" class="btn btn-primary" value="Agregar">
     </form>
 </div>
+<div>
+    <form>
+        <h3>Eliminar Producto</h3>
+        <div>
+            <label>Producto Id:</label>
+            <div>
+                <input type="text" id="id">
+            </div>
+        </div>
+        <button id="btn_deleteproduct">Eliminar Producto</button>
+    </form>
+</div>
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realtimeproducts.js"></script>
