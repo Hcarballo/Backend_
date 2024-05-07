@@ -1,7 +1,7 @@
 
 import { Router } from "express";
-import ProductsManager from '../managers/productsManager.js';
-
+import ProductsManager from '../dao/managers/productsManager.js';
+import { uploads } from "../utils/multer.js";
 
 const router = Router();
 
@@ -20,6 +20,10 @@ router.get('/realTimeProducts', async (req, res) => {
         title: "Listado de productos WebSocket",
         products,
     })
+})
+
+router.get('/chat', (req,res) =>{
+    res.render('chat',{})
 })
 
 export default router

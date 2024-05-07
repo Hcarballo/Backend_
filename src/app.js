@@ -3,16 +3,14 @@ import productRouter from './routes/product.router.js';
 import cartRouter from './routes/cart.router.js';
 import viewsRouter from './routes/views.router.js';
 import handlebars from 'express-handlebars';
-import { __dirname } from './utils.js';
-import { productsSocket } from './public/js/productsSocket.js'
-//UPLOADER MULTER
-//PRODUCTOSOCKET
+import { __dirname } from './utils/utils.js';
+import { productsSocket } from './public/js/productsSocket.js';
 import { Server } from 'socket.io';
-import productManager from './managers/productsManager.js';
-
+import productManager from './dao/managers/productsManager.js';
+import { uploads } from './utils/multer.js';
+import connectDB from './config/index.js';
 
 const PORT = 8080;
-
 const app = express();
 
 const httpServer = app.listen(PORT, error => {
@@ -21,15 +19,17 @@ const httpServer = app.listen(PORT, error => {
 })
 
 const io = new Server(httpServer);
-
+let msgs = [];
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/public'));
 
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
+
+connectDB();
 
 app.use(productsSocket(io));
 
@@ -42,6 +42,9 @@ app.use((error, req, res, next) => {
     res.status(500).send('Error 500 en el server');
 })
 
+// app.use('/subir-file', uploads.single('thumbnail'), (req, res) => {
+    
+// })
 
 io.on("connection", (socket) => {
     console.log("nuevo cliente conectado");
@@ -54,6 +57,10 @@ io.on("connection", (socket) => {
         const code = product.code;
         const stock = product.stock;
 
+        console.log(product.thumbnail)
+
+        uploads.single(product.thumbnail)
+
         try {
             const productmanager = new productManager();
             const result = await productmanager.addProducts(
@@ -64,7 +71,7 @@ io.on("connection", (socket) => {
                 code,
                 stock
             );
-            let msj = result;            
+            let msj = result;
             io.emit("updateProduct", msj);
 
         } catch (error) {
@@ -88,5 +95,11 @@ io.on("connection", (socket) => {
             console.log(error);
         }
     });
+
+    socket.on("message", data => {
+        console.log('message:', data);
+        msgs.push(data);
+        io.emit('msgLog', msgs);
+    })
 });
 
