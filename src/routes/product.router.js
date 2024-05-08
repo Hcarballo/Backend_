@@ -71,7 +71,7 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:pid', async (req, res) => {
-    const id = Number(req.params.pid);
+    const id = req.params.pid;
     const {
         title,
         description,
@@ -81,12 +81,13 @@ router.put('/:pid', async (req, res) => {
         stock,
         status
     } = req.body;
-
+console.log(`Entre para actualizar ${id}`)
     if (!title || !description || !price || !thumbnail || !code || !stock || status == undefined) {
         return res.send();
     }
     try {
-        const product = { id, title, description, price, thumbnail, code, stock, status };
+        console.log('Llegue hasta aca')
+        const product = {title, description, price, thumbnail, code, stock, status };
         await productModel.updateOne({_id: id}, product);
         //await classproducts.updateProduct(product);
         res.status(200).send({ status: 'success' });        
@@ -97,9 +98,9 @@ router.put('/:pid', async (req, res) => {
 
 router.delete('/:pid', async (req, res) => {
     const product = req.params.pid;
-    console.log(product);
+    console.log("voy a borrar");
     try {
-        const result = await productModel.deleteOne(Number(product));
+        const result = await productModel.findByIdAndDelete(product);
         // const result = await classproducts.deleteProduct(Number(product));
         res.status(200).send({ status: 'success', payload: result });
     } catch (error) {
