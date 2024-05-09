@@ -1,12 +1,11 @@
 import { Router } from 'express';
-import ProductsManager from '../dao/managers/productsManager.js';
+//import ProductsManager from '../dao/managers/productsManager.js';
 import { productModel } from '../dao/models/products.models.js';
 
 const router = Router();
-const classproducts = new ProductsManager();
+//const classproducts = new ProductsManager();
 
 router.get('/', async (req, res) => {
-
     const { limit } = req.query;
     try {
         const productsDB = await productModel.find({});
@@ -27,7 +26,7 @@ router.get('/', async (req, res) => {
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params;
     try {
-        const productDB = await productModel.getProductsById(parseInt(pid))
+        const productDB = await productModel.findById(pid);
         //const product = await classproducts.getProductsById(parseInt(pid));
         if (!productDB) {
             return res.send(`El Producto con el código ${pid} no existe`)
@@ -81,16 +80,15 @@ router.put('/:pid', async (req, res) => {
         stock,
         status
     } = req.body;
-console.log(`Entre para actualizar ${id}`)
+
     if (!title || !description || !price || !thumbnail || !code || !stock || status == undefined) {
         return res.send();
     }
     try {
-        console.log('Llegue hasta aca')
-        const product = {title, description, price, thumbnail, code, stock, status };
-        await productModel.updateOne({_id: id}, product);
+        const product = { title, description, price, thumbnail, code, stock, status };
+        await productModel.updateOne({ _id: id }, product);
         //await classproducts.updateProduct(product);
-        res.status(200).send({ status: 'success' });        
+        res.status(200).send({ status: 'success' });
     } catch (error) {
         console.log(error);
     }
@@ -98,7 +96,6 @@ console.log(`Entre para actualizar ${id}`)
 
 router.delete('/:pid', async (req, res) => {
     const product = req.params.pid;
-    console.log("voy a borrar");
     try {
         const result = await productModel.findByIdAndDelete(product);
         // const result = await classproducts.deleteProduct(Number(product));
@@ -106,7 +103,6 @@ router.delete('/:pid', async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-
 })
 
 export default router;

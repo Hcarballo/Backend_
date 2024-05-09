@@ -1,12 +1,21 @@
 import { Router } from 'express';
-import CartManager from '../dao/managers/cartsManager.js';
-const router = Router();
+//import CartManager from '../dao/managers/cartsManager.js';
+import { cartModel } from '../dao/models/carts.models.js';
+import { productModel } from '../dao/models/products.models.js';
 
+const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        const classManager = new CartManager();
-        await classManager.createCart()
+        //const classManager = new CartManager();
+        //await classManager.createCart()
+        const newCarro = {
+            products: [],
+            total: 0
+        }
+
+        const result = await cartModel.create(newCarro);
+
         console.log('carro agregado');
         res.status(200).send({ status: 'success' });
     } catch (error) {
@@ -17,22 +26,48 @@ router.get('/', async (req, res) => {
 router.get('/:cid', async (req, res) => {
     try {
         const cid = req.params.cid;
-        const classManager = new CartManager();
-        classManager.list_products(cid);
-        res.status(200).send({ status: 'success' });
+        const cartDB = await cartModel.findById(cid);
+        if (!cartDB) {
+            return res.send('Carro Inexistente');
+        }
+        else {
+            return res.send(cartDB);
+        }
+        // const classManager = new CartManager();
+        // classManager.list_products(cid);
+        //res.status(200).send({ status: 'success' });
     } catch (error) {
         console.log(error);
     }
 })
 
 router.post('/:cid', async (req, res) => {
+    const cid = req.params.cid;
+    const { pid, quantity } = req.body;
+
     try {
-        const cid = req.params.cid;
-        const { pid, quantity } = req.body;
+        const cartDB = await cartModel.findById(cid);
+        let productDB = await productModel.findById(pid);
 
-        const classManager = new CartManager();
+        if (!cartDB) {
+            return res.send('Carro Inexistente');
+        }
+        else {
+            const product = {
+                item: cartDB.products.length + 1,
+                pid: productDB._id,
+                quantity: quantity,
+                unitPrice: productDB.price,
+                subtotal: productDB.price * quantity
+            }
+            cartDB.total = total + (productDB.price * quantity);
+            cartDB.products.push(product);
+            return res.send(cartDB);
+        }
 
-        await classManager.add_productCart(cid, pid, quantity);
+        // const classManager = new CartManager();
+        // await classManager.add_productCart(cid, pid, quantity);
+
         res.status(200).send({ status: 'success' });
     } catch (error) {
         console.log(error);
@@ -42,9 +77,16 @@ router.post('/:cid', async (req, res) => {
 router.delete('/:cid', async (req, res) => {
     try {
         const cid = req.params.cid;
-        const classManager = new CartManager();
-        await classManager.delete_cart(cid);
-        res.status(200).send({ status: 'success' });
+        const result = await cartModel.findByIdAndDelete(cid);
+        if (!result) {
+            res.send('Error');
+        }
+        else {
+            res.status(200).send({ status: 'success', payload: result });
+        }
+        // const classManager = new CartManager();
+        // await classManager.delete_cart(cid);
+
     } catch (error) {
         console.log(error);
     }
