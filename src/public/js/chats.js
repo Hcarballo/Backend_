@@ -26,11 +26,14 @@ chat.addEventListener('keyup', evt => {
 })
 
 socket.on('msgLog', data => {
-    let log = document.getElementById('msglog');
+   let date = new Date();
+    let log =  document.getElementById('msglog');
     let msgs = '';
-    data.foreach(msg => {
-        msgs += `<li>${msg.user} - Dice: ${msg.message} </li><br>`;
+    data.forEach(msg => {
+        msgs += `<li>${msg.user} - Dice: ${msg.message} </li><br>`;                    
     })
-    log.innerHTML = msgs;
+
+    log.innerHTML = msgs;  
 })
+
 

@@ -9,6 +9,7 @@ import { Server } from 'socket.io';
 import productManager from './dao/managers/productsManager.js';
 import { uploads } from './utils/multer.js';
 import connectDB from './config/index.js';
+import { messageModel } from './dao/models/messages.models.js';
 
 const PORT = 8080;
 const app = express();
@@ -96,9 +97,19 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on("message", data => {
+    socket.on("message", async (data) => {
+        let date = new Date();
+        const {user, message} = data;
+        let _msg = {
+            user: user,
+            msg: message,
+            hour: String(`${date.getHours()}:${date.getMinutes()}`)
+        }  
+       await messageModel.create(_msg);
         console.log('message:', data);
+        
         msgs.push(data);
+       
         io.emit('msgLog', msgs);
     })
 });

@@ -60,15 +60,15 @@ router.post('/:cid', async (req, res) => {
                 unitPrice: productDB.price,
                 subtotal: productDB.price * quantity
             }
-            cartDB.total = total + (productDB.price * quantity);
+            cartDB.total = cartDB.total + (productDB.price * quantity);
             cartDB.products.push(product);
-            return res.send(cartDB);
+            await cartModel.findOneAndUpdate(cartDB);
+            res.status(200).send({ status: 'success' });
+            return res.send(cartDB);            
         }
-
         // const classManager = new CartManager();
         // await classManager.add_productCart(cid, pid, quantity);
-
-        res.status(200).send({ status: 'success' });
+       
     } catch (error) {
         console.log(error);
     }
