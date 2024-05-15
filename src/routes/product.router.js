@@ -1,21 +1,17 @@
 import { Router } from 'express';
-//import ProductsManager from '../dao/managers/productsManager.js';
 import { productModel } from '../dao/models/products.models.js';
 
 const router = Router();
-//const classproducts = new ProductsManager();
 
 router.get('/', async (req, res) => {
     const { limit } = req.query;
     try {
-        const productsDB = await productModel.find({});
-        //const products = await classproducts.getProducts();
+        const productsDB = await productModel.find({}).lean();
+        console.log('pase por el get del router')
         if (!limit) {
             return res.send(productsDB);
-            //return res.send(products);
         } else {
             let limitProducts = productsDB.slice(0, parseInt(limit));
-            //let limitProducts = products.slice(0, parseInt(limit));
             return res.send(limitProducts);
         }
     } catch (error) {
@@ -25,9 +21,9 @@ router.get('/', async (req, res) => {
 
 router.get('/:pid', async (req, res) => {
     const { pid } = req.params;
+    console.log('pase por el get/:id del router')
     try {
         const productDB = await productModel.findById(pid);
-        //const product = await classproducts.getProductsById(parseInt(pid));
         if (!productDB) {
             return res.send(`El Producto con el código ${pid} no existe`)
         } else {
@@ -61,8 +57,8 @@ router.post('/', async (req, res) => {
             stock: stock,
             status: true
         }
+        console.log('pase por el post del router')
         const result = await productModel.create(newProduct);
-        //await classproducts.addProducts(title, description, price, thumbnail, code, stock)
         res.status(200).send({ status: 'success', payload: result });
     } catch (error) {
         console.log(error);
@@ -80,14 +76,13 @@ router.put('/:pid', async (req, res) => {
         stock,
         status
     } = req.body;
-
+    console.log('pase por el put del router')
     if (!title || !description || !price || !thumbnail || !code || !stock || status == undefined) {
         return res.send();
     }
     try {
         const product = { title, description, price, thumbnail, code, stock, status };
         await productModel.updateOne({ _id: id }, product);
-        //await classproducts.updateProduct(product);
         res.status(200).send({ status: 'success' });
     } catch (error) {
         console.log(error);
@@ -96,9 +91,9 @@ router.put('/:pid', async (req, res) => {
 
 router.delete('/:pid', async (req, res) => {
     const product = req.params.pid;
+    console.log('pase por el delete del router')
     try {
         const result = await productModel.findByIdAndDelete(product);
-        // const result = await classproducts.deleteProduct(Number(product));
         res.status(200).send({ status: 'success', payload: result });
     } catch (error) {
         console.log(error);

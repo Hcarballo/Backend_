@@ -6,10 +6,10 @@ import handlebars from 'express-handlebars';
 import { __dirname } from './utils/utils.js';
 import { productsSocket } from './public/js/productsSocket.js';
 import { Server } from 'socket.io';
-import productManager from './dao/managers/productsManager.js';
 import { uploads } from './utils/multer.js';
 import connectDB from './config/index.js';
 import { messageModel } from './dao/models/messages.models.js';
+import productManager from './dao/managers/productsManager.js';
 
 const PORT = 8080;
 const app = express();
@@ -44,13 +44,13 @@ app.use((error, req, res, next) => {
 })
 
 // app.use('/subir-file', uploads.single('thumbnail'), (req, res) => {
-    
+
 // })
 
 io.on("connection", (socket) => {
     console.log("nuevo cliente conectado");
 
-    socket.on("addProduct", async (product) => {
+    socket.on("addProducts", (product) => {
         const title = product.title;
         const description = product.description;
         const price = product.price;
@@ -58,13 +58,11 @@ io.on("connection", (socket) => {
         const code = product.code;
         const stock = product.stock;
 
-        console.log(product.thumbnail)
-
         uploads.single(product.thumbnail)
 
         try {
             const productmanager = new productManager();
-            const result = await productmanager.addProducts(
+            const result = productmanager.addProducts(
                 title,
                 description,
                 price,
@@ -72,7 +70,7 @@ io.on("connection", (socket) => {
                 code,
                 stock
             );
-            let msj = result;
+            let msj = 'Producto Agregado';
             io.emit("updateProduct", msj);
 
         } catch (error) {
@@ -80,11 +78,10 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on("deleteProduct", async (id) => {
+    socket.on("deleteProduct", (id) => {
         try {
             const productmanager = new productManager();
-            const result = await productmanager.deleteProduct(parseInt(id));
-            console.log(`mE DA ${result}`);
+            const result = productmanager.deleteProduct(id);
             let msj = "";
             if (result) {
                 msj = "Producto eliminado";
@@ -99,17 +96,17 @@ io.on("connection", (socket) => {
 
     socket.on("message", async (data) => {
         let date = new Date();
-        const {user, message} = data;
+        const { user, message } = data;
         let _msg = {
             user: user,
             msg: message,
             hour: String(`${date.getHours()}:${date.getMinutes()}`)
-        }  
-       await messageModel.create(_msg);
+        }
+        await messageModel.create(_msg);
         console.log('message:', data);
-        
+
         msgs.push(data);
-       
+
         io.emit('msgLog', msgs);
     })
 });
