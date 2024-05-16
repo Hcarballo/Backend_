@@ -2,7 +2,7 @@ import { Router } from 'express';
 import CartManager from '../dao/managers/cartsManager.js';
 
 const router = Router();
-const cartManager = new CartManager()
+const cartManager = new CartManager();
 
 router.get('/', (req, res) => {
     try {
@@ -30,16 +30,31 @@ router.get('/:cid', async (req, res) => {
     }
 })
 
-router.post('/:cid', async (req, res) => {
+router.post('/:cid', (req, res) => {
     const cid = req.params.cid;
     const { pid, quantity } = req.body;
-
     try {
-        console.log("Estoy antes")
-        const result =  await cartManager.addprodtocart(cid, pid, quantity);
-        console.log("Finalice")
+        const result = cartManager.addprodtocart(cid, pid, quantity);
         if (!result) {
             return res.send('Carro Inexistente');
+        }
+        else {
+            res.status(200).send({ status: 'success' });
+            return res.send(result);
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+router.delete('/:cid/product/:pid', (req, res) => {
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+    try {
+        const result = cartManager.delprodtocart(cid, pid);
+        if (!result) {
+            return res.send('El producto no existe');
         }
         else {
             res.status(200).send({ status: 'success' });

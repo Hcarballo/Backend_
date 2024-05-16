@@ -10,7 +10,7 @@ export default class CartManager {
         const newCart = {
             products: [],
             total: 0
-        }        
+        }
         await cartModel.create(newCart);
         return;
     }
@@ -31,22 +31,30 @@ export default class CartManager {
             unitPrice: productDB.price,
             subtotal: productDB.price * quantity
         }
+
         cartDB.total = cartDB.total + (productDB.price * quantity);
         cartDB.products.push(product);
-        await cartModel.findOneAndUpdate(cartDB);
-        console.log("Estoy en el medio")
+        await cartModel.findOneAndUpdate({ _id: cid }, cartDB);
         return cartDB;
     }
 
-    delprodtocart = async (pid) => {
-        return;
+    delprodtocart = async (cid, pid) => {
+        const cartDB = await cartModel.findById(cid);
+        const productIndex = cartDB.products.findIndex(product => product.pid.toString() === pid);
+
+        if (productIndex === -1) {
+            throw new Error('Producto no encontrado en el carrito');
+        }
+        cartDB.total = cartDB.total - cartDB.products[productIndex].subtotal;
+        cartDB.products.splice(productIndex, 1);
+
+        await cartModel.findOneAndUpdate({ _id: cid }, cartDB);
+
+        return cartDB;
     }
 
     deletecart = async (cid) => {
         await cartModel.findByIdAndDelete(cid);
         return;
     }
-
-
-
 }
