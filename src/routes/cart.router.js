@@ -4,7 +4,7 @@ import CartManager from '../dao/managers/cartsManager.js';
 const router = Router();
 const cartManager = new CartManager();
 
-router.get('/', (req, res) => {
+router.post('/', (req, res) => {
     try {
         const result = cartManager.createCart();
         console.log('carro agregado');
