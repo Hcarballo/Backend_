@@ -7,7 +7,7 @@ import { __dirname } from './utils/utils.js';
 import { productsSocket } from './public/js/productsSocket.js';
 import { Server } from 'socket.io';
 import { uploads } from './utils/multer.js';
-import connectDB from './config/index.js';
+import { connectDB } from './config/index.js';
 import { messageModel } from './dao/models/messages.models.js';
 import productManager from './dao/managers/productsManager.js';
 
@@ -51,24 +51,28 @@ io.on("connection", (socket) => {
     console.log("nuevo cliente conectado");
 
     socket.on("addProducts", (product) => {
-        const title = product.title;
-        const description = product.description;
-        const price = product.price;
-        const thumbnail = product.thumbnail;
-        const code = product.code;
-        const stock = product.stock;
+        const codigo = product.codigo;
+        const nombre = product.nombre;
+        const imagen = product.imagen;
+        const uva = product.uva;
+        const bodega = product.bodega;
+        const precio = product.precio;
+        const categoria = product.categoria;
+
 
         uploads.single(product.thumbnail)
 
         try {
             const productmanager = new productManager();
             const result = productmanager.addProducts(
-                title,
-                description,
-                price,
-                thumbnail,
-                code,
-                stock
+                codigo,
+                nombre,
+                imagen,
+                uva,
+                bodega,
+                precio,
+                categoria,
+
             );
             let msj = 'Producto Agregado';
             io.emit("updateProduct", msj);

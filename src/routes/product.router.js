@@ -36,25 +36,27 @@ router.get('/:pid', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const {
-        title,
-        description,
-        price,
-        thumbnail,
-        code,
-        stock,
+        codigo,
+        nombre,
+        imagen,
+        uva,
+        bodega,
+        precio,
+        categoria
     } = req.body;
 
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
+    if (!codigo || !nombre || !imagen || !uva || !bodega || !precio || !categoria) {
         return res.send();
     }
     try {
         const newProduct = {
-            title: title,
-            description: description,
-            price: price,
-            thumbnail: thumbnail,
-            code: code,
-            stock: stock,
+            codigo: codigo,
+            nombre: nombre,
+            imagen: imagen,
+            uva: uva,
+            bodega: bodega,
+            precio: precio,
+            categoria: categoria,
             status: true
         }
         console.log('pase por el post del router')
@@ -68,20 +70,31 @@ router.post('/', async (req, res) => {
 router.put('/:pid', async (req, res) => {
     const id = req.params.pid;
     const {
-        title,
-        description,
-        price,
-        thumbnail,
-        code,
-        stock,
+        codigo,
+        nombre,
+        imagen,
+        uva,
+        bodega,
+        precio,
+        categoria,
         status
+
     } = req.body;
     console.log('pase por el put del router')
-    if (!title || !description || !price || !thumbnail || !code || !stock || status == undefined) {
+    if (!codigo || !nombre || !imagen || !uva || !bodega || !precio || !categoria || status == undefined) {
         return res.send();
     }
     try {
-        const product = { title, description, price, thumbnail, code, stock, status };
+        const product = { 
+            codigo,
+            nombre,
+            imagen,
+            uva,
+            bodega,
+            precio,
+            categoria,
+            status: true 
+        };
         await productModel.updateOne({ _id: id }, product);
         res.status(200).send({ status: 'success' });
     } catch (error) {

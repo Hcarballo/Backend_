@@ -6,8 +6,13 @@ export default class CartManager {
 
     }
 
+    getCart = async () => {
+        await cartModel.find();
+        return;
+    }
+
     createCart = async () => {
-        await cartModel.create({ products: [], quantity: Number });
+        await cartModel.create({ products: [], total: 0});
         return;
     }
 
@@ -18,27 +23,14 @@ export default class CartManager {
 
     addprodtocart = async (cid, pid, quantity) => {
         const cart = await cartModel.findOne({ _id: cid });
-        cart.products.push({ product: pid, quantity });
+        let product = await productModel.findById(pid);
+        const unitprice = product.price;
+        const subtotal = product.price * quantity;
+        cart.total = cart.total + product.price * quantity;
+        cart.products.push({ product: pid, quantity, unitprice, subtotal });
         const resp = await cartModel.findByIdAndUpdate({ _id: cid }, cart);
     }
 
-    // addprodtocart = async (cid, pid, quantity) => {
-    //     const cartDB = await cartModel.findById(cid);
-    //     let productDB = await productModel.findById(pid);
-
-    //     const product = {
-    //         item: cartDB.products.length + 1,
-    //         pid: productDB._id,
-    //         quantity: quantity,
-    //         unitPrice: productDB.price,
-    //         subtotal: productDB.price * quantity
-    //     }
-
-    //     cartDB.total = cartDB.total + (productDB.price * quantity);
-    //     cartDB.products.push(product);
-    //     await cartModel.findOneAndUpdate({ _id: cid }, cartDB);
-    //     return cartDB;
-    // }
 
     delprodtocart = async (cid, pid) => {
         const cartDB = await cartModel.findById(cid);

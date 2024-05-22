@@ -4,6 +4,11 @@ import CartManager from '../dao/managers/cartsManager.js';
 const router = Router();
 const cartManager = new CartManager();
 
+router.get('/', async (req,res) => {
+    const cartDB = await cartManager.getCart();
+    res.send(cartDB) 
+})
+
 router.post('/', (req, res) => {
     try {
         const result = cartManager.createCart();

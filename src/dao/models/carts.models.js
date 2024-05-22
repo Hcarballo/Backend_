@@ -10,9 +10,11 @@ const cartSchema = new Schema({
                 ref: 'products',
             },
             quantity: Number,
+            unitprice: Number,
+            subtotal: Number
         }]
     },
-    total: Number
+    total: Number   
 })
 
 // const productSchema = new Schema({

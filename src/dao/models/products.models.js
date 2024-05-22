@@ -3,19 +3,32 @@ import { Schema, model } from "mongoose";
 const productCollection = 'products';
 
 const productSchema = new Schema({
-    title: {
-        type:String,
-        index: true
-    },
-    description: String,
-    price: Number,
-    thumbnail: String,
-    code: {
+    codigo: {
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
-    stock: Number,
+    nombre: {
+        type: String,
+        required: true
+    },
+    imagen: String,
+    uva: {
+        type: String,
+        required: true
+    },
+    bodega: {
+        type: String,
+        required: true
+    },
+    precio: {
+        type: Number,
+        required: true
+    },
+    categoria: {
+        type: String,
+        required: true
+    },
     status: Boolean
 });
 

@@ -7,24 +7,26 @@ export default class ProductsManager {
     }
     /**
      * 
-     * @param {string} title 
-     * @param {string} description 
-     * @param {number} price 
-     * @param {string} thumbnail 
-     * @param {string} code 
-     * @param {number} stock 
-     * @param {boolean} status  
+     * @param {*} codigo 
+     * @param {*} nombre 
+     * @param {*} imagen 
+     * @param {*} uva 
+     * @param {*} bodega 
+     * @param {*} precio 
+     * @param {*} categoria 
+     * @returns 
      */
 
-    addProducts = async (title, description, price, thumbnail, code, stock) => {
+    addProducts = async (codigo, nombre, imagen, uva, bodega, precio, categoria) => {
         try {
             const product = {
-                title,
-                description,
-                price,
-                thumbnail,
-                code,
-                stock,
+                codigo,
+                nombre,
+                imagen,
+                uva,
+                bodega,
+                precio,
+                categoria,
                 status: true
             }
             await productModel.create(product);
