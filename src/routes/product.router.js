@@ -42,10 +42,11 @@ router.post('/', async (req, res) => {
         uva,
         bodega,
         precio,
-        categoria
+        categoria,
+        stock
     } = req.body;
 
-    if (!codigo || !nombre || !imagen || !uva || !bodega || !precio || !categoria) {
+    if (!codigo || !nombre || !imagen || !uva || !bodega || !precio || !categoria || !stock) {
         return res.send();
     }
     try {
@@ -57,6 +58,7 @@ router.post('/', async (req, res) => {
             bodega: bodega,
             precio: precio,
             categoria: categoria,
+            stock: stock,
             status: true
         }
         console.log('pase por el post del router')
@@ -77,15 +79,16 @@ router.put('/:pid', async (req, res) => {
         bodega,
         precio,
         categoria,
+        stock,
         status
 
     } = req.body;
     console.log('pase por el put del router')
-    if (!codigo || !nombre || !imagen || !uva || !bodega || !precio || !categoria || status == undefined) {
+    if (!codigo || !nombre || !imagen || !uva || !bodega || !precio || !categoria || stock || status == undefined) {
         return res.send();
     }
     try {
-        const product = { 
+        const product = {
             codigo,
             nombre,
             imagen,
@@ -93,7 +96,8 @@ router.put('/:pid', async (req, res) => {
             bodega,
             precio,
             categoria,
-            status: true 
+            stock,
+            status: true
         };
         await productModel.updateOne({ _id: id }, product);
         res.status(200).send({ status: 'success' });

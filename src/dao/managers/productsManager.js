@@ -36,9 +36,9 @@ export default class ProductsManager {
         }
     }
 
-    getProducts = async () => {
+    getProducts = async ({limit = 3, numpage = 20}) => {
         try {
-            const listProducts = await productModel.find({}).lean();
+            const listProducts = await productModel.paginate({}, { limit, page: numpage, lean: true });
             return listProducts;
         } catch (error) {
             console.log(error);

@@ -12,6 +12,20 @@ router.get('/', async (req, res) => {
     });
 })
 
+router.get('/products', async (req, res) => {
+    const { numpage, limit } = req.query;
+    const { docs, page, hasNextPage, hasPrevPage, nextPage, prevPage } = await productManager.getProducts({ limit, numpage });
+
+    res.render('products', {
+        products: docs,
+        page,
+        hasNextPage,
+        hasPrevPage,
+        nextPage,
+        prevPage
+    })
+})
+
 router.get('/realTimeProducts', async (req, res) => {
     const products = await productManager.getProducts();
     res.render('realTimeProducts', {
@@ -20,8 +34,8 @@ router.get('/realTimeProducts', async (req, res) => {
     })
 })
 
-router.get('/chat', (req,res) =>{
-    res.render('chat',{})
+router.get('/chat', (req, res) => {
+    res.render('chat', {})
 })
 
 export default router

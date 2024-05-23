@@ -4,29 +4,35 @@ const btn_addproduct = document.getElementById("btn_addproduct");
 const btn_deleteproduct = document.getElementById("btn_deleteproduct");
 
 btn_addproduct.addEventListener("click", () => {
-    const title = document.getElementById("title").value;
-    const description = document.getElementById("description").value;
-    const price = document.getElementById("price").value;
-    const thumbnail = document.getElementById("thumbnail").value;
-    const code = document.getElementById("code").value;
+    const codigo= document.getElementById("codigo").value;
+    const nombre = document.getElementById("nombre").value;
+    const precio = document.getElementById("precio").value;
+    const uva = document.getElementById("uva").value;
+    const imagen = document.getElementById("imagen").value;
+    const categoria = document.getElementById("categoria").value;
+    const bodega = document.getElementById("bodega").value;
     const stock = document.getElementById("stock").value;
 
     const product = {
-        title: title,
-        description: description,
-        price: price,
-        thumbnail: thumbnail,
-        code: code,
+        codigo: codigo,
+        nombre: nombre,
+        precio: precio,
+        imagen: imagen,
+        uva: uva,
+        categoria: categoria,
+        bodega: bodega,
         stock: stock,
     };
 
     socket.emit("addProducts", product);
 
-    title.value = "";
-    description.value = "";
-    price.value = "";
-    thumbnail.value = "";
-    code.value = "";
+    nombre.value = "";
+    codigo.value = "";
+    precio.value = "";
+    imagen.value = "";
+    bodega.value = "";
+    uva.value = "";
+    categoria.value = "";
     stock.value = "";   
    
 });

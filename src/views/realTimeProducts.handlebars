@@ -3,9 +3,11 @@
     {{#each products}}
     <div>
         <p>id: {{this._id}}</p>
-        <p>title: {{this.title}}</p>
-        <p>description: {{this.description}}</p>
-        <p>price: ${{this.price}}</p>
+        <p>Nombre: {{this.nombre}}</p>
+        <p>Uva: {{this.uva}}</p>
+        <p>Bodega: {{this.bodega}}</p>
+        <p>Precio: ${{this.precio}}</p>
+        <br>
     </div>
     {{/each}}
 </div>
@@ -14,19 +16,23 @@
 </div>
 <div>
     <form method="post" enctype="multipart/form-data">
-        <label for="title">Título:</label><br>
-        <input type="text" id="title" name="title"><br>
-        <label for="description">Descripción:</label><br>
-        <input type="text" id="description" name="description"><br>
-        <label for="price">Precio:</label><br>
-        <input type="number" id="price" name="price" step="1" min="0"><br>
+        <label for="codigo">Código:</label><br>
+        <input type="text" id="codigo" name="codigo"><br>
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre"><br>
+        <label for="precio">Precio:</label><br>
+        <input type="number" id="precio" name="precio" step="1" min="0"><br>
 
-        <label for="thumbnail">Imagen:</label><br>
-        <input type="file" id="thumbnail" name="thumbnail"><br>
+        <label for="imagen">Imagen:</label><br>
+        <input type="file" id="imagen" name="imagen"><br>
 
-        <label for="code">Código:</label><br>
-        <input type="text" id="code" name="code"><br>
-        <label for="stock">Stock:</label><br>
+        <label for="uva">Uva:</label><br>
+        <input type="text" id="uva" name="uva"><br>
+        <label for="bodega">Bodega:</label><br>
+        <input type="text" id="bodega" name="bodega" min="0"><br>
+            <label for="categoria">Categoría:</label><br>
+        <input type="text" id="categoria" name="categoria" min="0"><br>
+            <label for="stock">Stock:</label><br>
         <input type="number" id="stock" name="stock" min="0"><br>
 
         <input id="btn_addproduct" type="submit" class="btn btn-primary" value="Agregar">

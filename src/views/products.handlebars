@@ -7,7 +7,14 @@
         <p>Uva: {{this.uva}}</p>
         <p>Bodega: {{this.bodega}}</p>
         <p>Precio: ${{this.precio}}</p>
-        <br>
+        <hr>
     </div>
     {{/each}}
+    {{#if hasPrevPage}}
+    <a href="/products?numpage={{prevPage}}">Anterior</a>
+    {{/if}}
+    <label>{{page}}</label>
+    {{#if hasNextPage}}
+    <a href="/products?numpage={{nextPage}}">Siguiente</a>
+    {{/if}}    
 </main>

@@ -58,6 +58,7 @@ io.on("connection", (socket) => {
         const bodega = product.bodega;
         const precio = product.precio;
         const categoria = product.categoria;
+        const stock = product.stock;
 
 
         uploads.single(product.thumbnail)
@@ -72,6 +73,7 @@ io.on("connection", (socket) => {
                 bodega,
                 precio,
                 categoria,
+                stock,
 
             );
             let msj = 'Producto Agregado';
