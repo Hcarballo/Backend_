@@ -1,13 +1,6 @@
 <main>
-    <h1>Listado de Productos</h1>
-    {{#each products}}
-    <div>
-        <p>id: {{this._id}}</p>
-        <p>Nombre: {{this.nombre}}</p>
-        <p>Uva: {{this.uva}}</p>
-        <p>Bodega: {{this.bodega}}</p>
-        <p>Precio: ${{this.precio}}</p>
-        <br>
-    </div>
-    {{/each}}
+    <h1>Bienvenido {{email}}</h1> 
+    <a href="/products">Productos</a>
+    <a href="/register">Registro</a>
+    <a href="/login">Login</a>
 </main>

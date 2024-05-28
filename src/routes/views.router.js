@@ -5,11 +5,15 @@ import { uploads } from "../utils/multer.js";
 const router = Router();
 const productManager = new ProductsManager();
 
-router.get('/', async (req, res) => {
-    const products = await productManager.getProducts();
-    res.render('home', {
-        products,
-    });
+
+router.get('/home', async (req, res) => {  
+    if(req.session.user){
+        const {email} = req.session.user; 
+    }else{
+     const email = 'Sin Usuario';
+    }
+    console.log(email);
+    res.render('home', {email});   
 })
 
 router.get('/products', async (req, res) => {
@@ -23,7 +27,7 @@ router.get('/products', async (req, res) => {
         hasPrevPage,
         nextPage,
         prevPage
-    })
+    });    
 })
 
 router.get('/realTimeProducts', async (req, res) => {
@@ -36,6 +40,14 @@ router.get('/realTimeProducts', async (req, res) => {
 
 router.get('/chat', (req, res) => {
     res.render('chat', {})
+})
+
+router.get('/login', (req,res)=>{
+    res.render('login');
+})
+
+router.get('/register', (req,res)=>{
+    res.render('register');
 })
 
 export default router

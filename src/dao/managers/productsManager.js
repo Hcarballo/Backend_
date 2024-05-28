@@ -32,7 +32,7 @@ export default class ProductsManager {
             await productModel.create(product);
             return;
         } catch (error) {
-            console.log(error);
+            console.log(error);                        
         }
     }
 
@@ -41,7 +41,7 @@ export default class ProductsManager {
             const listProducts = await productModel.paginate({}, { limit, page: numpage, lean: true });
             return listProducts;
         } catch (error) {
-            console.log(error);
+            console.log(error);            
         }
     }
 

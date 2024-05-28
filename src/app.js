@@ -2,6 +2,7 @@ import express from 'express';
 import productRouter from './routes/product.router.js';
 import cartRouter from './routes/cart.router.js';
 import viewsRouter from './routes/views.router.js';
+import pruebaCookie from './routes/cookie.router.js';
 import handlebars from 'express-handlebars';
 import { __dirname } from './utils/utils.js';
 import { productsSocket } from './public/js/productsSocket.js';
@@ -10,6 +11,12 @@ import { uploads } from './utils/multer.js';
 import { connectDB } from './config/index.js';
 import { messageModel } from './dao/models/messages.models.js';
 import productManager from './dao/managers/productsManager.js';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import { sessionsRouter } from './routes/session.router.js';
+import fileStore from 'session-file-store';
+import mongoStore from 'connect-mongo';
+
 
 const PORT = 8080;
 const app = express();
@@ -25,6 +32,43 @@ let msgs = [];
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+app.use(cookieParser('secreto'));
+
+//---Persistencia en memoria
+// app.use(session({
+//     secret: 'firmasecreta',
+//     resave: true,
+//     saveUninitialized: true
+// }));
+
+//---Persistencia en Archivo
+// const fstore = fileStore(session);
+// app.use(session({
+//     store: new fstore({
+//         path: './sessions',
+//         ttl: 10000,
+//         retries: 0
+//     }),
+//     secret: 'firmasecreta',
+//     resave: true,
+//     saveUninitialized: true
+// }));
+
+//---Persistencia en DB Mongo
+app.use(session({
+    store: mongoStore.create({
+        mongoUrl: 'mongodb+srv://hernancarballo:hc270777@e-wine.pnvzjwv.mongodb.net/EcomerceDB?retryWrites=true&w=majority&appName=E-Wine',
+        mongoOptions:{
+            //useNewUrlParser: true,
+            //useUnifiedTopology: true,           
+        },
+        ttl:60*60*1000*24        
+    }),
+    secret: 'firmasecreta',
+    resave: true,
+    saveUninitialized: true
+}));
+
 
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
@@ -37,6 +81,8 @@ app.use(productsSocket(io));
 app.use('/', viewsRouter);
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/sessions', sessionsRouter);
+app.use('/cookie', pruebaCookie);
 
 app.use((error, req, res, next) => {
     console.log(error);
@@ -116,4 +162,5 @@ io.on("connection", (socket) => {
         io.emit('msgLog', msgs);
     })
 });
+
 
