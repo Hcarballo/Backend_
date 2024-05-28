@@ -5,20 +5,24 @@ import Swal from 'sweetalert2';
 
 export const sessionsRouter = Router();
 
+const userService = new UsersManager();
+
 sessionsRouter.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body;    
 
-    if (email != email || password != password) return res.send('Login Failed');
+    if (!email || !password) return res.send('Complete todos los campos');
 
-    const userFound = await userService.getUserBy({email});
+    const userFound = await userService.getUserBy({ email });
 
-    if(!userFound) return res.status(401).send({status:'error',error:'Usuario no encontrado'})
-    req.session.user = {        
+    if (userFound.email != email && userFound.password != password) return res.send('Login Failed');
+    
+    req.session.user = {
+        first_name: userFound.first_name,
+        last_name: userFound.last_name,
         email,
-        admin: userFound.role === 'Admin'
-    }
-    res.redirect('/home');
-    //res.send('Login Success');
+        role: userFound.role
+    }     
+    res.redirect('/api/products/3');    
 })
 
 sessionsRouter.get('/current', auth, (req, res) => {
@@ -28,11 +32,10 @@ sessionsRouter.get('/current', auth, (req, res) => {
 sessionsRouter.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) return res.send({ status: 'error', error: err });
-        else return res.send('logout');
+        else 
+        res.redirect('/home');
     })
 })
-
-const userService = new UsersManager();
 
 sessionsRouter.post('/register', async (req, res) => {
     try {

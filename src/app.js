@@ -58,10 +58,7 @@ app.use(cookieParser('secreto'));
 app.use(session({
     store: mongoStore.create({
         mongoUrl: 'mongodb+srv://hernancarballo:hc270777@e-wine.pnvzjwv.mongodb.net/EcomerceDB?retryWrites=true&w=majority&appName=E-Wine',
-        mongoOptions:{
-            //useNewUrlParser: true,
-            //useUnifiedTopology: true,           
-        },
+        
         ttl:60*60*1000*24        
     }),
     secret: 'firmasecreta',
