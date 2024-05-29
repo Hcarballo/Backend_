@@ -17,7 +17,6 @@ import { sessionsRouter } from './routes/session.router.js';
 import fileStore from 'session-file-store';
 import mongoStore from 'connect-mongo';
 
-
 const PORT = 8080;
 const app = express();
 

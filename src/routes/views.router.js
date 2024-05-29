@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ProductsManager from "../dao/managers/productsManager.js";
+import { auth } from "../middlewares/auth.middlewares.js";
 import { uploads } from "../utils/multer.js";
 
 const router = Router();
@@ -7,13 +8,15 @@ const productManager = new ProductsManager();
 
 router.get('/home', async (req, res) => {
     if (req.session.user) {
-        const { first_name } = req.session.user;
-        res.render('home', { first_name });
+        const { first_name} = await req.session.user;
+        res.render('home', {first_name});
+    }else{
+        res.render('home', {});
     }
-    res.render('home',{});
+   
 })
 
-router.get('/products', async (req, res) => {
+router.get('/products', auth, async (req, res) => {
     const { numpage, limit } = req.query;
     const { docs, page, hasNextPage, hasPrevPage, nextPage, prevPage } = await productManager.getProducts({ limit, numpage });
 

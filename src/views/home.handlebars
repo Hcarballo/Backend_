@@ -2,9 +2,10 @@
     <h1>Bienvenido {{first_name}}</h1>
     <a href="/products">Productos</a>
     <a href="/register">Registro</a>
+
     {{#if first_name}}
         <a href="/api/sessions/logout">Logout</a>
     {{else}}
         <a href="/login">Login</a>
-    {{/if}}
+    {{/if}}  
 </main>

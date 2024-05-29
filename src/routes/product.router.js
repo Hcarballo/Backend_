@@ -6,6 +6,7 @@ const router = Router();
 const productManager = new ProductsManager();
 
 router.get('/', async (req, res) => {
+    
     const { limit } = req.query;
     try {
         const productsDB = await productManager.getProducts();
@@ -18,6 +19,7 @@ router.get('/', async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+    return;
 })
 
 router.get('/:pid', async (req, res) => {
@@ -32,6 +34,7 @@ router.get('/:pid', async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+    return;
 })
 
 router.post('/', async (req, res) => {
@@ -66,6 +69,7 @@ router.post('/', async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+    return;
 })
 
 router.put('/:pid', async (req, res) => {
@@ -113,6 +117,7 @@ router.delete('/:pid', async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+    return;
 })
 
 export default router;

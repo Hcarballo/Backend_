@@ -8,21 +8,32 @@ export const sessionsRouter = Router();
 const userService = new UsersManager();
 
 sessionsRouter.post('/login', async (req, res) => {
-    const { email, password } = req.body;    
+    const { email, password } = req.body;
 
     if (!email || !password) return res.send('Complete todos los campos');
 
-    const userFound = await userService.getUserBy({ email });
+    //hardcodeo para Desafio_5 ________________________________________________
+    if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
+        req.session.user = {
+            first_name: 'CoderHouse',
+            last_name: "",
+            email,
+            role: 'admin'
+        }
+        return res.redirect('/home');       
+    }
+    //______________________________________________________________________________
 
+    const userFound = await userService.getUserBy({ email });
     if (userFound.email != email && userFound.password != password) return res.send('Login Failed');
-    
+
     req.session.user = {
         first_name: userFound.first_name,
         last_name: userFound.last_name,
         email,
         role: userFound.role
-    }     
-    res.redirect('/api/products/3');    
+    }
+    res.redirect('/home');
 })
 
 sessionsRouter.get('/current', auth, (req, res) => {
@@ -32,9 +43,10 @@ sessionsRouter.get('/current', auth, (req, res) => {
 sessionsRouter.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) return res.send({ status: 'error', error: err });
-        else 
-        res.redirect('/home');
+        else
+            res.redirect('/home');
     })
+    return;
 })
 
 sessionsRouter.post('/register', async (req, res) => {
@@ -75,6 +87,7 @@ sessionsRouter.post('/register', async (req, res) => {
     } catch (error) {
         console.log(error);
     }
+    return;
 })
 
 

@@ -36,7 +36,7 @@ export default class ProductsManager {
         }
     }
 
-    getProducts = async ({limit = 3, numpage = 20}) => {
+    getProducts = async ({limit = 3, numpage = 1}) => {
         try {
             const listProducts = await productModel.paginate({}, { limit, page: numpage, lean: true });
             return listProducts;
