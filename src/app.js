@@ -16,6 +16,11 @@ import session from 'express-session';
 import { sessionsRouter } from './routes/session.router.js';
 import fileStore from 'session-file-store';
 import mongoStore from 'connect-mongo';
+import passport from 'passport';
+import { initPassport } from './config/passport.config.js';
+
+
+
 
 const PORT = 8080;
 const app = express();
@@ -65,7 +70,6 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
@@ -84,6 +88,11 @@ app.use((error, req, res, next) => {
     console.log(error);
     res.status(500).send('Error 500 en el server');
 })
+
+//Passport
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 // app.use('/subir-file', uploads.single('thumbnail'), (req, res) => {
 
