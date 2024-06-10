@@ -14,9 +14,8 @@ const cartSchema = new Schema({
             subtotal: Number
         }]
     },
-    total: Number   
+    total: Number
 })
-
 
 cartSchema.pre('find', function () {
     this.populate('products.product')

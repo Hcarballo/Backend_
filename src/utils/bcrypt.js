@@ -1,6 +1,6 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt'; //Encriptacion
 
-export const createHash = async (password) => bcrypt.hashSync(password,bcrypt.genSaltSync(10));
-
-
-export const validatePass = async (password,user) => bcrypt.compareSync(password, user.password);
+// Hasheamos el Password
+export const createHash = (password) => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+// Validamos el Password
+export const validatePass = (user, password) => bcrypt.compareSync(password, user.password);

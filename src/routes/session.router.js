@@ -1,124 +1,71 @@
 import { Router } from "express";
-import { auth } from "../middlewares/auth.middlewares.js";
-import { createHash, validatePass } from "../utils/bcrypt.js"
 import UsersManager from "../dao/managers/usersManager.js";
-import Swal from 'sweetalert2';
-import passport from "passport";
+import { createHash, validatePass } from "../utils/bcrypt.js";
+import { generateToken } from "../utils/jwt.js";
+import { auth } from "../middlewares/auth.middlewares.js";
+import { passportCall } from "../middlewares/passportCall.middlewares.js";
 
 export const sessionsRouter = Router();
 
-const userService = new UsersManager();
+const userManager = new UsersManager();
 
-// sessionsRouter.post('/login', async (req, res) => {
-//     const { email, password } = req.body;
+sessionsRouter.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(401).send({ status: 'error', message: 'Datos incompletos' })
+    const userFound = await userManager.getUserByEmail({ email });
 
-//     if (!email || !password) return res.status(401).send('Complete todos los campos');
+    if (!validatePass({ password: userFound.password }, password)) return res.status(401).send({ status: 'error', message: 'No coinciden las credenciales' });
+    const token = generateToken({
+        id: userFound._id,
+        email,
+        role: userFound.role
+    })
 
-//     //hardcodeo para Desafio_5 ________________________________________________
-//     if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-//         req.session.user = {
-//             first_name: 'CoderHouse',
-//             last_name: "",
-//             email,
-//             role: 'admin'
-//         }
-//         return res.redirect('/home');       
-//     }
-//     //______________________________________________________________________________
-
-//     const userFound = await userService.getUserBy({ email });
-//     if (userFound.email != email && userFound.password != password) return res.status(400).send({status:'error', error: 'Login Failed'});
-//     if(validatePass(password,{password: userFound.password}))return res.status(401).send({status:'error', error:'User not found'})
+    res.cookie('token', token, {
+        maxAge: 60 * 60 * 1000 * 24,
+        httpOnly: true
+    }).send({ status: 'success', message: 'usuario logueado' })
+});
 
 
-//     req.session.user = {
-//         first_name: userFound.first_name,
-//         last_name: userFound.last_name,
-//         email,
-//         role: userFound.role
-//     }
-//     res.redirect('/home');
-// })
+sessionsRouter.post('/register', async (req, res) => {
+    const { first_name, last_name, password, date_born, email } = req.body;
+    if (!email || !password) return res.status(401).send({ status: 'error', message: 'Datos incompletos' });
 
-// sessionsRouter.post('/register', async (req, res) => {
-//     try {
-//         const { first_name, last_name, email, password } = req.body;
+    const userFound = await userManager.getUserByEmail({ email });
 
-//         if (!first_name || !last_name || !email || !password) return res.status(401).send({ status: 'error', error: 'datos incompletos' });
+    if (userFound) return res.status(401).send({ status: 'error', message: 'Ususario existente' });
 
-//         const userExist = await userService.getUserBy({ email });
-
-//         if (userExist) return res.status(401).send({ status: 'error', error: 'el usuaruio existe' });
-
-//         const newUser = {
-//             first_name,
-//             last_name,
-//             email,
-//             password: await createHash(password)
-//         }
-
-//         const result = await userService.createUser(newUser);
-
-//         if (result) {
-//             res.redirect('/login');
-//             Swal.fire({
-//                 icon: 'success',
-//                 title: '¡Usuario registrado!',
-//                 text: 'Bienvenido a nuestra plataforma.',
-//             });
-//         } else {
-//             console.log('Error al registrar');
-//             Swal.fire({
-//                 icon: 'error',
-//                 title: 'Error al registrar',
-//                 text: 'Por favor, inténtalo nuevamente más tarde.',
-//             });
-//         }
-
-//     } catch (error) {
-//         console.log(error);
-//     }
-// })
-
-//------------------------------------------------------------------------------------------------------
-
-sessionsRouter.get('/current', auth, (req, res) => {
-    res.send('Datos sensible que ve el admin');
-})
-
-sessionsRouter.post('/register', passport.authenticate('register', { failureRedirect: '/failregister' }), (req, res) => {
-    res.send({ status: 'success', mesaage: 'User Registrado' });
-})
-sessionsRouter.post('/failregister', async (req, res) => {
-    console.log('Fallo la estrategia');
-    res.send({ error: 'failed' });
-})
-sessionsRouter.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin' }), async (req, res) => {
-    if (!req.user) return res.status(400).send({ status: 'error', error: 'Credenciales invalidas' });
-    req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        email: req.user.email
+    const newUser = {
+        first_name,
+        last_name,
+        age: userManager.edad(date_born),
+        email,
+        password: createHash(password)
     }
-    req.send({ status: 'success', payload: req.user });
-})
-sessionsRouter.post('faillogin', (req, res) => {
-    res.send({ error: 'Fallo el login' });
-})
+    console.log(date_born)
+
+    const result = await userManager.createUser(newUser);
+
+    if (!result) return res.status(401).send({ status: 'error', message: 'No se completo el Registro' });
+
+    const token = generateToken({
+        email,
+    })
+
+    res.cookie('token', token, {
+        maxAge: 60 * 60 * 1000 * 24,
+        httpOnly: true
+    }).send({ status: 'success', message: 'usuario registrado' });
+});
+
+sessionsRouter.get('/current', passportCall('jwt'), auth('admin'), async (req, res) => {
+    res.send('Datos sensibles');
+});
 
 sessionsRouter.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) return res.send({ status: 'error', error: err });
-        else
-            res.redirect('/home');
-    })
-    return;
-})
-
-sessionsRouter.get('/github', passport.authenticate('github', { scope: 'user:email' }), async (req, res) => { });
-
-sessionsRouter.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
-    console.log(`Github envia esto ${req.user}`)
-    req.session.user = req.user;
-    res.redirect('/home');
+    req.session.destroy(() => {
+        res.clearCookie('token');
+        res.redirect('/home');
+    });
 });

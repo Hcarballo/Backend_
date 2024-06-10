@@ -1,29 +1,35 @@
 import { userModel } from "../models/users.models.js";
 
 export default class UsersManager {
-    constructor() {
+    constructor() { }
 
-    }
-
-    getUser = async ({ limit = 3, numPage = 2 }) => {
-        const users = await userModel.paginate({}, { limit, page: numPage, sort: { price: -1 }, lean: true })
+    getUser = async () => {
+        const users = await userModel.find().lean();
+        return users;
     }
 
     createUser = async (user) => {
         try {
-            const addUser = await userModel.create(user);
-            console.log(user.first_name)
-            return addUser;
+            await userModel.create(user);
         } catch (error) {
             console.log(error);
         }
     }
 
-    getUserBy = async (filter) => {
-        return await userModel.findOne(filter);
+    getUserBy = async (user) => {
+        return await userModel.findOne(user);
     }
 
     getUserByEmail = async (email) => {
-        return await userModel.find((user) => user.email === email);
+        return await userModel.findOne(email);
     }
+
+    edad = (date_born) => {
+        const hoy = new Date();
+        const fechaNac = new Date(date_born);
+        const milisegundosEnUnAnio = 31536000000;
+        const edadEnMilisegundos = hoy - fechaNac;
+        const edad = Math.floor(edadEnMilisegundos / milisegundosEnUnAnio);
+        return edad;
+    };
 }

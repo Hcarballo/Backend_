@@ -1,6 +1,7 @@
 import express from 'express';
 import productRouter from './routes/product.router.js';
 import cartRouter from './routes/cart.router.js';
+import userRouter from './routes/user.router.js';
 import viewsRouter from './routes/views.router.js';
 import pruebaCookie from './routes/cookie.router.js';
 import handlebars from 'express-handlebars';
@@ -14,13 +15,9 @@ import productManager from './dao/managers/productsManager.js';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { sessionsRouter } from './routes/session.router.js';
-import fileStore from 'session-file-store';
 import mongoStore from 'connect-mongo';
 import passport from 'passport';
-import { initPassport } from './config/passport.config.js';
-
-
-
+import { initializePassport } from './config/passport.config.js';
 
 const PORT = 8080;
 const app = express();
@@ -36,34 +33,16 @@ let msgs = [];
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
-app.use(cookieParser('secreto'));
+//______________________________________________________________
+app.use(cookieParser());
+initializePassport();
+app.use(passport.initialize());
 
-//---Persistencia en memoria
-// app.use(session({
-//     secret: 'firmasecreta',
-//     resave: true,
-//     saveUninitialized: true
-// }));
-
-//---Persistencia en Archivo
-// const fstore = fileStore(session);
-// app.use(session({
-//     store: new fstore({
-//         path: './sessions',
-//         ttl: 10000,
-//         retries: 0
-//     }),
-//     secret: 'firmasecreta',
-//     resave: true,
-//     saveUninitialized: true
-// }));
-
-//---Persistencia en DB Mongo
+//---Persistencia en DB Mongo ---------------------------
 app.use(session({
     store: mongoStore.create({
         mongoUrl: 'mongodb+srv://hernancarballo:hc270777@e-wine.pnvzjwv.mongodb.net/EcomerceDB?retryWrites=true&w=majority&appName=E-Wine',
-        
-        ttl:60*60*1000*24        
+        ttl: 60 * 60 * 1000 * 24
     }),
     secret: 'firmasecreta',
     resave: true,
@@ -82,6 +61,7 @@ app.use('/', viewsRouter);
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/users', userRouter);
 app.use('/cookie', pruebaCookie);
 
 app.use((error, req, res, next) => {
@@ -89,14 +69,6 @@ app.use((error, req, res, next) => {
     res.status(500).send('Error 500 en el server');
 })
 
-//Passport
-initPassport();
-app.use(passport.initialize());
-app.use(passport.session());
-
-// app.use('/subir-file', uploads.single('thumbnail'), (req, res) => {
-
-// })
 
 io.on("connection", (socket) => {
     console.log("nuevo cliente conectado");

@@ -5,12 +5,11 @@ import ProductsManager from '../dao/managers/productsManager.js';
 const router = Router();
 const productManager = new ProductsManager();
 
-router.get('/', async (req, res) => {
-    
+router.get('/', async (req, res) => {    
     const { limit } = req.query;
-    try {
-        const productsDB = await productManager.getProducts();
-        if (!limit) {
+    try {    
+        const productsDB = await productManager.getProducts();   
+        if (!limit) {             
             return res.send(productsDB);
         } else {
             let limitProducts = productsDB.slice(0, parseInt(limit));

@@ -7,7 +7,7 @@ router.get('/setCookie', (req, res) => {
 })
 
 router.get('/getCookie', (req, res) => {
-    //res.send(req.cookies);
+    
     res.send(req.signedCookies);
 })
 
