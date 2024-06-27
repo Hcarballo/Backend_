@@ -1,24 +1,29 @@
 import { Router } from "express";
-import ProductsManager from "../dao/managers/productsManager.js";
-import UsersManager from "../dao/managers/usersManager.js";
+import ProductsController from "../Controllers/products.controller.js";
+import UsersController from "../Controllers/users.controller.js";
 import { auth } from "../middlewares/auth.middlewares.js";
 import { passportCall } from "../middlewares/passportCall.middlewares.js";
 
 const router = Router();
-const productManager = new ProductsManager();
-const usersManager = new UsersManager();
+const productManager = new ProductsController();
+const usersManager = new UsersController();
 
 router.get('/home', async (req, res) => {
-    if (req.session.user) {
-        const { first_name } = await req.session.user;
-        res.render('home', { first_name });
-    } else {
-        res.render('home', {});
-    }
+    try {
+        if (req.session.user) {
+            const { first_name } = await req.session.user;
+            res.render('home', { first_name });
+        } else {
+            res.render('home', {});
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+    // res.render('home', {})
 })
 
 router.get('/user', passportCall('jwt'), auth('admin'), async (req, res) => {
-    const users = await usersManager.getUser();
+    const users = await usersManager.getUsers();
     res.render('user', { users });
 })
 
@@ -49,6 +54,7 @@ router.get('/chat', (req, res) => {
 })
 
 router.get('/login', (req, res) => {
+    console.log("aca")
     res.render('login');
 })
 

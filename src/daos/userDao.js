@@ -1,11 +1,10 @@
 import { userModel } from "../models/users.models.js";
 
-export default class UsersManager {
+export default class UsersDao {
     constructor() { }
 
     getUser = async () => {
-        const users = await userModel.find().lean();
-        return users;
+        return await userModel.find().lean();
     }
 
     createUser = async (user) => {
@@ -23,13 +22,5 @@ export default class UsersManager {
     getUserByEmail = async (email) => {
         return await userModel.findOne(email);
     }
-
-    edad = (date_born) => {
-        const hoy = new Date();
-        const fechaNac = new Date(date_born);
-        const milisegundosEnUnAnio = 31536000000;
-        const edadEnMilisegundos = hoy - fechaNac;
-        const edad = Math.floor(edadEnMilisegundos / milisegundosEnUnAnio);
-        return edad;
-    };
+  
 }
