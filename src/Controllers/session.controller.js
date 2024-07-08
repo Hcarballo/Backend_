@@ -1,7 +1,7 @@
 import { createHash, validatePass } from "../utils/bcrypt.js";
 import { generateToken } from "../utils/jwt.js";
 import UserController from "./users.controller.js";
-import UsersDao from "../daos/userDao.js";
+import UsersDao from "../daos/MONGO/userDao.js";
 
 const {
     getUserByEmail,
@@ -14,11 +14,20 @@ class SessionController {
     constructor() { };
 
     login = async (req, res) => {
+        console.log('Entre')
         const { email, password } = req.body;
-        if (!email || !password) return res.status(401).send({ status: 'error', message: 'Datos incompletos' })
+        if (!email || !password) return res.status(401).send({ status: 'error', message: 'Datos incompletos' });
+
         const userFound = await getUserByEmail({ email });
 
-        if (!validatePass({ password: userFound.password }, password)) return res.status(401).send({ status: 'error', message: 'No coinciden las credenciales' });
+        if (!userFound) return res.status(400).send({ status: 'error', error: 'Usuario no encontrado' })
+
+        const okPass = validatePass(password, userFound.password);
+
+        if (!okPass) {
+            return res.status(401).send({ status: 'error', message: 'No coinciden las credenciales' });
+        }
+
         const token = generateToken({
             id: userFound._id,
             email,
@@ -29,6 +38,7 @@ class SessionController {
             maxAge: 60 * 60 * 1000 * 24,
             httpOnly: true
         }).send({ status: 'success', message: 'usuario logueado' });
+
     };
 
     register = async (req, res) => {
@@ -68,7 +78,7 @@ class SessionController {
             res.clearCookie('token');
             res.redirect('/home');
         } else {
-           res.status(500).send('No se pudo destruir la sesión');
+            res.status(500).send('No se pudo destruir la sesión');
         }
     };
 

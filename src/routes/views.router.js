@@ -10,17 +10,13 @@ const usersManager = new UsersController();
 
 router.get('/home', async (req, res) => {
     try {
-        if (req.session.user) {
-            const { first_name } = await req.session.user;
-            res.render('home', { first_name });
-        } else {
-            res.render('home', {});
-        }
-    } catch (error) {
+        res.render('home', {});
+    }
+    catch (error) {
         console.log(error);
-    } 
-    // res.render('home', {})
-})
+    }
+});
+
 
 router.get('/user', passportCall('jwt'), auth('admin'), async (req, res) => {
     const users = await usersManager.getUsers();
@@ -28,17 +24,9 @@ router.get('/user', passportCall('jwt'), auth('admin'), async (req, res) => {
 })
 
 router.get('/products', async (req, res) => {
-    const { numpage, limit } = req.query;
-    const { docs, page, hasNextPage, hasPrevPage, nextPage, prevPage } = await productManager.getProducts({ limit, numpage });
+    const product = await productManager.getProducts();
 
-    res.render('products', {
-        products: docs,
-        page,
-        hasNextPage,
-        hasPrevPage,
-        nextPage,
-        prevPage
-    });
+    res.render('products', { product });
 })
 
 router.get('/realTimeProducts', async (req, res) => {
@@ -54,7 +42,6 @@ router.get('/chat', (req, res) => {
 })
 
 router.get('/login', (req, res) => {
-    console.log("aca")
     res.render('login');
 })
 

@@ -1,16 +1,9 @@
-import ProductDao from "../daos/productDao.js";
-
-const {
-    addProducts,
-    getProducts,
-    getProductsById,
-    deleteProduct,
-    updateProduct
-
-} = new ProductDao();
+import { productService } from "../service/index.js";
 
 class ProductController {
-    constructor() { };
+    constructor() {
+        this.productService = productService;
+    };
 
     addProducts = async (req, res) => {
         const {
@@ -39,7 +32,7 @@ class ProductController {
                 stock: stock,
                 status: true
             }
-            const result = await addProducts(newProduct);
+            const result = await this.productService.addProducts(newProduct);
             res.status(200).send({ status: 'success', payload: result });
         } catch (error) {
             console.log(error);
@@ -48,25 +41,24 @@ class ProductController {
     };
 
     getProducts = async (req, res) => {
-        const { limit } = req.query;
         try {
-            const productsDB = getProducts();
-            if (!limit) {
-                return res.send(productsDB);
-            } else {
-                let limitProducts = productsDB.slice(0, parseInt(limit));
-                return res.send(limitProducts);
+            const productsDB = await this.productService.getProducts();
+            if(!productsDB){
+                return res.send('No se encuentran productos');
             }
-        } catch (error) {
+            return res.send(productsDB);
+        }
+
+        catch (error) {
             console.log(error);
-        } 
+        }
         return;
     };
 
     getProductsById = async (req, res) => {
         const { pid } = req.params;
         try {
-            const productDB = await getProductsById(pid);
+            const productDB = await this.productService.getProductsById(pid);
             if (!productDB) {
                 return res.send(`El Producto con el código ${pid} no existe`)
             } else {
@@ -108,7 +100,7 @@ class ProductController {
                 stock,
                 status: true
             };
-            await updateProduct({ _id: id }, product);
+            await this.productService.updateProduct({ _id: id }, product);
             res.status(200).send({ status: 'success' });
         } catch (error) {
             console.log(error);
@@ -118,7 +110,7 @@ class ProductController {
     deleteProduct = async (req, res) => {
         const product = req.params.pid;
         try {
-            const result = await deleteProduct(product);
+            const result = await this.productService.deleteProduct(product);
             res.status(200).send({ status: 'success', payload: result });
         } catch (error) {
             console.log(error);

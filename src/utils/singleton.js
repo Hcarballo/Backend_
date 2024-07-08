@@ -1,10 +1,12 @@
-import mongoose, { connect } from "mongoose";
+import mongoose from "mongoose";
 import dotenv from 'dotenv';
 
-export class Singleton{
+dotenv.config();
+
+class Singleton{
     static #instance;
     constructor(){
-        connect('mongodb+srv://hernancarballo:hc270777@e-wine.pnvzjwv.mongodb.net/EcomerceDB?retryWrites=true&w=majority&appName=E-Wine');
+       mongoose.connect(process.env.MONGO_URL);
     }
 
     static getInstance(){
@@ -17,3 +19,5 @@ export class Singleton{
         return this.#instance;
     }
 }
+
+export default Singleton;

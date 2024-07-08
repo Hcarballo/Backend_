@@ -1,25 +1,20 @@
-import ProductDao from "../daos/productDao.js"
-import CartDao from "../daos/cartDao.js";
+import ProductDao from "../daos/MONGO/productDao.js"
+import { cartService } from "../service/index.js";
 
-const {
-    getCart,
-    createCart,
-    getCartByID,
-    addprodtocart,
-    delprodtocart,
-    deletecart
-} = new CartDao();
+
 
 const {
     getProductsById
 } = new ProductDao();
 
 class CartController {
-    constructor() { };
+    constructor() {
+        this.cartService = cartService
+    };
 
     getCart = async (req, res) => {
         try {
-            const cartDB = await getCart();
+            const cartDB = await this.cartService.getCart();
             res.send(cartDB);
         } catch (error) {
             console.log(error);
@@ -28,7 +23,7 @@ class CartController {
 
     createCart = async (req, res) => {
         try {
-            const result = await createCart();
+            const result = await this.cartService.createCart();
             console.log('carro agregado');
             res.status(200).send({ status: 'success', payload: result });
         } catch (error) {
@@ -39,7 +34,7 @@ class CartController {
     getCartByID = async (req, res) => {
         try {
             const cid = req.params.cid;
-            const cart = await getCartByID(cid);
+            const cart = await this.cartService.getCartByID(cid);
             if (!cart) {
                 return res.send('Carro Inexistente');
             }
@@ -56,7 +51,7 @@ class CartController {
         const cid = req.params.cid;
         const { pid, quantity } = req.body;
         try {
-            const cart = await getCartByID(cid);
+            const cart = await this.cartService.getCartByID(cid);
             if (!cart) {
                 return res.send('Carro Inexistente');
             }
@@ -69,7 +64,7 @@ class CartController {
 
                 const result = await addprodtocart(cid, cart);
 
-                if(!result) res.send('Error operación');
+                if (!result) res.send('Error operación');
                 res.status(200).send({ status: 'success' });
                 return res.send(result);
             }
@@ -83,14 +78,14 @@ class CartController {
         const cid = req.params.cid;
         const pid = req.params.pid;
         try {
-            const cart = await getCartByID(cid);
+            const cart = await this.cartService.getCartByID(cid);
             if (!cart) return res.send('El carrito no existe');
 
             const productIndex = cart.products.findIndex(product => product.pid.toString() === pid);
             if (productIndex === -1) {
                 throw new Error('Producto no encontrado en el carrito');
             }
-            cart.total = cartDB.total - cartDB.products[productIndex].subtotal;
+            cart.total = cart.total - cart.products[productIndex].subtotal;
             cart.products.splice(productIndex, 1);
 
             if (!result) {
@@ -109,7 +104,7 @@ class CartController {
     deleteCart = async (req, res) => {
         try {
             const cid = req.params.cid;
-            const result = deletecart(cid);
+            const result = this.cartService.deletecart(cid);
             if (!result) {
                 res.send('Error');
             }
