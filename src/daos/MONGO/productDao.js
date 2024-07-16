@@ -6,7 +6,7 @@ export default class ProductsDao {
         this.productModel = productModel;
     };
 
-    async addProducts(product) {
+    addProducts = async (product) => {
         return await this.productModel.create(product);
     };
 
@@ -19,7 +19,7 @@ export default class ProductsDao {
     };
 
     updateProduct = async (updatedProduct) => {
-        const result = await this.productModel.updateOne(updatedProduct);
+        return await this.productModel.updateOne(updatedProduct);
     };
 
     deleteProduct = async (id) => {

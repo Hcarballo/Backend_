@@ -3,14 +3,16 @@ import { userService } from "../service/index.js";
 
 class UserController {
     constructor() {
-        this.userService = userService;
+        this.service = userService;
     };
 
     getUsers = async (req, res) => {
         try {
-            const users = await this.userService.getUser();
-            if (users.length == 0) return res.send('No hay Usuarios Registrados');
-            return res.send(users);
+            const users = await this.service.getUsers();
+            if (users.length == 0){
+                return res.send('No hay Usuarios Registrados');
+            } 
+            return res.send({ status: 'success', payload: users });
         } catch (error) {
             console.log(error);
         }
@@ -36,8 +38,10 @@ class UserController {
                 password: createHash(password)
             }
 
-            const result = await this.userService.createUser(newUser);
-            if (result) res.send({ status: 'success', message: 'usuario registrado' });
+            const result = await this.service.createUser(newUser);
+            if (result) {
+                return res.send({ status: 'success', message: 'usuario registrado' });
+            }
             return res.status(401).send({ status: 'error', message: 'No se completo el Registro' });
 
         } catch (error) {
@@ -48,8 +52,10 @@ class UserController {
     getUserBy = async (req, res) => {
         const { uId } = req.params;
         try {
-            const result = await this.userService.getUserBy(uId);
-            if (!result) return res.send('Usuario no encontrado');
+            const result = await this.service.getUserBy(uId);
+            if (!result) {
+                return res.send('Usuario no encontrado');
+            }
             return res.send(result);
         } catch (error) {
             console.log(error);
@@ -59,8 +65,10 @@ class UserController {
     getUserByEmail = async (req, res) => {
         const { email } = req.params;
         try {
-            const result = await this.userService.getUserByEmail(email);
-            if (!result) return res.send('Usuario no encontrado');
+            const result = await this.service.getUserByEmail(email);
+            if (!result) {
+                return res.send('Usuario no encontrado');
+            }
             return res.send(result);
         } catch (error) {
             console.log(error);

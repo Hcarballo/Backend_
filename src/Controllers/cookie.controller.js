@@ -6,7 +6,6 @@ class CookieController {
     };
 
     getCookie = (req, res) => {
-
         res.send(req.signedCookies);
     };
 

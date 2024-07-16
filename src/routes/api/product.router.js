@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import ProductController from '../../Controllers/products.controller.js';
+import ProductsController from '../../Controllers/products.controller.js';
 
 
 const router = Router();
@@ -9,7 +9,7 @@ const {
     getProductsById,
     deleteProduct,
     updateProduct
-} = new ProductController();
+} = new ProductsController();
 
 router.get('/', getProducts);
 

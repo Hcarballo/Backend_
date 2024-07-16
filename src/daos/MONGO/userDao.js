@@ -5,9 +5,9 @@ export default class UsersDao {
         this.userModel = userModel;
     }
 
-    getUser = async () => {
+    getUsers = async () => {
         try {
-            return await this.userModel.find().lean();
+            return await this.userModel.find();
         } catch (error) {
             console.log(error);
         }
@@ -15,7 +15,7 @@ export default class UsersDao {
 
     createUser = async (user) => {
         try {
-            await this.userModel.create(user);
+           return await this.userModel.create(user);
         } catch (error) {
             console.log(error);
         }

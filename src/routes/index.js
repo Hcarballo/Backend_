@@ -4,7 +4,7 @@ import cartRouter from './api/cart.router.js';
 import userRouter from './api/users.router.js';
 import emailRouter from './api/email.router.js';
 import viewsRouter from '../routes/views.router.js';
-import {sessionsRouter}  from './api/session.router.js';
+import sessionsRouter  from './api/session.router.js';
 import pruebaCookie from './api/cookie.router.js';
 
 const router = Router();

@@ -5,14 +5,14 @@ export default class UserRepository {
         this.userDao = userDao;
     }
 
-
-    getUsers = async () => await this.userDao.getUser();
+    getUsers = async () => await this.userDao.getUsers();
 
     getUser = async filter => await this.userDao.getUserBy(filter);
     
     createUser = async (user) => {
         const newUser = new UserDto(user);
-        return await this.userDao.createUser(newUser);
+        const result = await this.userDao.createUser(newUser);
+        return (result);
     }
 
     //updateUser = async (uid, userToUpdate) => await this.userDao.updateUser(uid,userToUpdate);

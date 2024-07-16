@@ -14,7 +14,5 @@ export const objectConfig = {
 
 
 export const connectDB = async () => {
-    Singleton.getInstance();
-    // mongoose.connect(process.env.MONGO_URL);
-    // console.log('Base de datos conectada');
+    Singleton.getInstance();   
 }

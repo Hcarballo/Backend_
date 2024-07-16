@@ -2,7 +2,7 @@ import { productService } from "../service/index.js";
 
 class ProductController {
     constructor() {
-        this.productService = productService;
+        this.service = productService;
     };
 
     addProducts = async (req, res) => {
@@ -18,7 +18,7 @@ class ProductController {
         } = req.body;
 
         if (!codigo || !nombre || !imagen || !uva || !bodega || !precio || !categoria || !stock) {
-            return res.send();
+            res.send();
         }
         try {
             const newProduct = {
@@ -32,42 +32,38 @@ class ProductController {
                 stock: stock,
                 status: true
             }
-            const result = await this.productService.addProducts(newProduct);
+            const result = await this.service.addProducts(newProduct);
             res.status(200).send({ status: 'success', payload: result });
         } catch (error) {
             console.log(error);
         }
-        return;
     };
 
     getProducts = async (req, res) => {
         try {
-            const productsDB = await this.productService.getProducts();
-            if(!productsDB){
-                return res.send('No se encuentran productos');
+            const productsDB = await this.service.getProducts();
+            if (!productsDB) {
+                res.send('No se encuentran productos');
+            } else {
+                res.send(productsDB);
             }
-            return res.send(productsDB);
-        }
-
-        catch (error) {
+        } catch (error) {
             console.log(error);
-        }
-        return;
+        }        
     };
 
     getProductsById = async (req, res) => {
         const { pid } = req.params;
         try {
-            const productDB = await this.productService.getProductsById(pid);
+            const productDB = await this.service.getProductsById(pid);
             if (!productDB) {
-                return res.send(`El Producto con el código ${pid} no existe`)
+                res.send(`El Producto con el código ${pid} no existe`)
             } else {
-                return res.send(productDB);
+                 res.send(productDB);
             }
         } catch (error) {
             console.log(error);
         }
-        return;
     };
 
     updateProduct = async (req, res) => {
@@ -86,7 +82,7 @@ class ProductController {
         } = req.body;
 
         if (!codigo || !nombre || !imagen || !uva || !bodega || !precio || !categoria || stock || status == undefined) {
-            return res.send();
+            res.send();
         }
         try {
             const product = {
@@ -100,7 +96,7 @@ class ProductController {
                 stock,
                 status: true
             };
-            await this.productService.updateProduct({ _id: id }, product);
+            await this.service.updateProduct({ _id: id }, product);
             res.status(200).send({ status: 'success' });
         } catch (error) {
             console.log(error);
@@ -110,12 +106,11 @@ class ProductController {
     deleteProduct = async (req, res) => {
         const product = req.params.pid;
         try {
-            const result = await this.productService.deleteProduct(product);
+            const result = await this.service.deleteProduct(product);
             res.status(200).send({ status: 'success', payload: result });
         } catch (error) {
             console.log(error);
         }
-        return;
     };
 }
 
