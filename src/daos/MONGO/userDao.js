@@ -7,7 +7,7 @@ export default class UsersDao {
 
     getUsers = async () => {
         try {
-            return await this.userModel.find();
+            return await this.userModel.find().lean();
         } catch (error) {
             console.log(error);
         }
@@ -31,10 +31,17 @@ export default class UsersDao {
 
     getUserByEmail = async (email) => {
         try {
-            return await this.userModel.findOne(email);
+            return await this.userModel.findOne({email});
         } catch (error) {
             console.log(error);
         }
     }
 
+    updateUser = async (user, userToUpdate) => {
+        try {
+            return await this.userModel.findOneAndUpdate(user,userToUpdate);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }

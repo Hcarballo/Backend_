@@ -1,0 +1,55 @@
+<main>
+    <h1>Detalles del Producto</h1>
+
+    <ul>
+        <li><strong>Código:</strong> {{codigo }}</li>
+        <li><strong>Nombre:</strong> {{nombre }}</li>
+        <li><strong>Imagen:</strong> <img src={{imagen }} alt="Imagen del producto"></li>
+        <li><strong>Uva:</strong> {{uva }}</li>
+        <li><strong>Bodega:</strong> {{bodega }}</li>
+        <li><strong>Precio:</strong> {{ precio }}</li>
+        <li><strong>Categoría:</strong> {{categoria }}</li>
+        <li><strong>Stock:</strong> {{ stock }}</li>
+        <li><strong>Estado:</strong> {{ status }}</li>
+    </ul>
+
+    <form action="/api/cart/{{cid.id}}" method="post">
+        <input type="hidden" name="pid" id="pid" value={{id}} >
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" name="quantity" id="quantity" value="0" min="0">
+        <label for="cantidad">Subtotal:</label>
+        <input type="number" id="subtotal" value="0">
+
+        <button type="submit">Agregar al carrito</button>
+    </form>
+
+    <button onclick="incrementar({{this.precio}},{{this.stock}})">+</button>
+    <button onclick="decrementar({{this.precio}},{{this.stock}})">-</button>
+
+
+    <a href="/home">Volver</a>
+</main>
+
+<script>
+    function incrementar(precio, stock) {
+        const cantidadInput = document.getElementById('quantity');
+        const subtotalInput = document.getElementById('subtotal');
+        const newValue = parseInt(cantidadInput.value) + 1;
+
+        if (newValue <= stock) {
+            cantidadInput.value = newValue;
+            subtotalInput.value = precio * newValue;
+        }
+    }
+
+    function decrementar(precio, stock) {
+        const cantidadInput = document.getElementById('quantity');
+        const subtotalInput = document.getElementById('subtotal');
+        const newValue = parseInt(cantidadInput.value) - 1;
+
+        if (newValue >= 0) {
+            cantidadInput.value = newValue;
+            subtotalInput.value = precio * newValue;
+        }
+    }
+</script>

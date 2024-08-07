@@ -32,7 +32,7 @@ class ProductController {
                 stock: stock,
                 status: true
             }
-            const result = await this.service.addProducts(newProduct);
+            const result = await this.service.createProduct(newProduct);
             res.status(200).send({ status: 'success', payload: result });
         } catch (error) {
             console.log(error);

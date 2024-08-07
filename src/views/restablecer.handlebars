@@ -1,0 +1,15 @@
+<main>
+    <section>
+        <h3>Restablecer contraseña</h3>
+        {{email}}
+        <div>
+            <form action="/api/sessions/restablecer" method="POST" class="form-group w-50">
+                <div class="form-group">
+                    <label for="email">Ingresa tu email y te enviaremos un enlace para restablecer tu contraseña.</label>
+                    <input type="email" name="email" class="form-control" placeholder="Ingresa tu correo electrónico">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Enviar</button>
+            </form>
+        </div>
+    </section>
+</main>

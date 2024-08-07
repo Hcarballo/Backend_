@@ -16,7 +16,7 @@ const {
 
 router.get('/', getUsers);
 router.get('/:uid', getUserBy);
-router.get('/', createUser);
+router.post('/', createUser);
 //router.get('/:uid', updateUser);
 //router.get('/:uid', deleteUser);
 

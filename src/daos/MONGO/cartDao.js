@@ -5,12 +5,12 @@ export default class CartsDao {
         this.cartModel =  cartModel;
     }
 
-    getCart = async () => {
+    getCarts = async () => {
         return await this.cartModel.find();
     };
 
-    createCart = async () => {
-        return await this.cartModel.create({ products: [], total: 0 });
+    createCart = async (cart) => {
+        return await this.cartModel.create(cart);
     };
 
     getCartByID = async (id) => {

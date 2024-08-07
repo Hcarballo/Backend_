@@ -12,7 +12,11 @@ const productSchema = new Schema({
     precio: { type: Number, required: true },
     categoria: { type: String, required: true },
     stock: { type: Number, required: true },
-    status: Boolean
+    status: Boolean,
+    owner: {
+        default: 'admin',
+        type: String
+    }
 });
 
 productSchema.plugin(mongoosePaginate);

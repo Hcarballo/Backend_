@@ -52,7 +52,7 @@ class UserController {
     getUserBy = async (req, res) => {
         const { uId } = req.params;
         try {
-            const result = await this.service.getUserBy(uId);
+            const result = await this.service.getUser(uId);
             if (!result) {
                 return res.send('Usuario no encontrado');
             }
@@ -74,6 +74,10 @@ class UserController {
             console.log(error);
         }
     };
+
+    updateUser = async (req,res) => {
+        
+    }
 
 
     edad = (date_born) => {

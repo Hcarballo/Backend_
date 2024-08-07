@@ -4,8 +4,8 @@ export default class CartRepository {
     }
 
     getCarts = async () => await this.cartDao.getCarts();
-    getCart = async filter => await this.cartDao.getCart(filter);
+    getCartByID = async filter => await this.cartDao.getCartByID(filter);
     createCart = async (newCart) => await this.cartDao.createCart(newCart);
-    addProdToCart = async (cid, cart) => await this.cartDao.addProdToCart(cid, cart);
+    addProdToCart = async (cid, cart) => await this.cartDao.addprodtocart(cid, cart);
     deleteCart = async cid => await this.cartDao.deleteCart(cid);
 }

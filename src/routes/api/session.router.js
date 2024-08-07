@@ -9,6 +9,8 @@ const {
     login,
     register,
     logout,
+    restablecer,
+    resetpassword,
     funcPassport
 } = new SessionController();
 
@@ -16,6 +18,10 @@ sessionsRouter.post('/login', login);
 
 sessionsRouter.post('/register', register);
 
+sessionsRouter.post('/restablecer', restablecer)
+
+sessionsRouter.post('/resetpassword', resetpassword )
+    
 sessionsRouter.get('/current', passportCall('jwt'), authorization('admin'), funcPassport);
 
 sessionsRouter.get('/logout', logout);

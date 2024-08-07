@@ -13,7 +13,7 @@ const userSchema = new Schema({
     cardId: { type: Schema.Types.ObjectId, ref: 'carts' },
     role: {
         type: String,
-        enum:['user','user-full'],
+        enum:['user','user-full','Premium'],
         default: 'user'
     }
 });

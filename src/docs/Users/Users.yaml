@@ -1,0 +1,106 @@
+paths:
+  /api/users/:
+    get:
+      sumary: Obtiene todos los usuarios
+      tags:
+      - Users
+      responses:
+        "200":
+          description: Los usuarios fueron obtenidos correctamente desde la base de datos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/User'
+        "500":
+          description: Error interno del servidor, query defectuosa o error de conexión con la base de datos
+  /api/users/{uid}:
+    get:
+      sumary: Obtiene un usuario a traves de su ID
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description:  id del usuario que se desea solicitar
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Usuario encrontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Users'   
+  /api/users:
+    post:
+      sumary: Crea un nuevo usuario
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/createUser'
+      responses:
+        "201":
+          description: El usuario fue creado con exito                            
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de Mongo
+        first_name:
+          type: String
+          description: Nombre del usuario
+        last_name:
+          type: String
+          description: Apellido del usuario
+        email:
+          type: String
+          description: Email del usuario
+        password:
+          type: String
+          description: Password del usuario        
+      example:
+        _id: ObjectId(aslkmas93840askmm2epskmlx)
+        first_name: Hernan
+        last_name: Carballo
+        email: hernancarballo@hotmail.com
+        password: meofevroi20'03m2l3km22    
+
+  requestBodies:
+    createUser:
+      type: Object
+      properties:       
+        first_name:
+          type: String
+          description: Nombre del usuario
+        last_name:
+          type: String
+          description: Apellido del usuario
+        date:
+          type: Date
+          description: Fecha denacimiento  
+        email:
+          type: String
+          description: Email del usuario
+        password:
+          type: String
+          description: Password del usuario  
+        role:
+          type: String
+          description: Rol del usuario        
+      example:        
+        first_name: Hernan
+        last_name: Carballo
+        date: 10/10/1977
+        email: hernancarballo@hotmail.com
+        password: 12345a 
+        role: user   

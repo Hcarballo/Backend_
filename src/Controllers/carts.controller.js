@@ -1,5 +1,6 @@
 import ProductDao from "../daos/MONGO/productDao.js"
 import { cartService } from "../service/index.js";
+import { generateToken, parseJwt } from "../utils/jwt.js";
 
 
 
@@ -9,12 +10,12 @@ const {
 
 class CartController {
     constructor() {
-        this.cartService = cartService
+        this.cartService = cartService;
     };
 
     getCart = async (req, res) => {
         try {
-            const cartDB = await this.cartService.getCart();
+            const cartDB = await this.cartService.getCarts();
             res.send(cartDB);
         } catch (error) {
             console.log(error);
@@ -22,10 +23,27 @@ class CartController {
     };
 
     createCart = async (req, res) => {
+        console.log('Entre Mal')
         try {
-            const result = await this.cartService.createCart();
+            let user = null;
+            if (req.cookies.token) {
+                user = parseJwt(req.cookies.token);
+            }
+            const cart = {
+                user: user.id,
+                products: [],
+                total: 0
+            }
+            const result = await this.cartService.createCart(cart);
+
+            const tokenCart = generateToken({
+                id: result.id
+            })
+            res.cookie('tokenCart', tokenCart, {
+                maxAge: 60 * 60 * 1000 * 24
+            })
             console.log('carro agregado');
-            res.status(200).send({ status: 'success', payload: result });
+            res.status(200).redirect('/home');
         } catch (error) {
             console.log(error);
         };
@@ -49,7 +67,9 @@ class CartController {
 
     addProductToCart = async (req, res) => {
         const cid = req.params.cid;
+        console.log(`estos son ${cid}`)
         const { pid, quantity } = req.body;
+        console.log(`estos son ${pid} y ${quantity}`)
         try {
             const cart = await this.cartService.getCartByID(cid);
             if (!cart) {
@@ -57,16 +77,16 @@ class CartController {
             }
             else {
                 let product = await getProductsById(pid);
-                const unitprice = product.price;
-                const subtotal = product.price * quantity;
-                cart.total = cart.total + product.price * quantity;
+                const unitprice = product.precio;
+                const subtotal = product.precio * quantity;
+                cart.total = cart.total + product.precio * quantity;
+                console.log(`Producto: ${pid} - Cantidad: ${quantity} - Precio Uni: ${unitprice} - Subtotal: ${subtotal} - Total: ${cart.total} - ID: ${cart._id}`)
                 cart.products.push({ product: pid, quantity, unitprice, subtotal });
 
-                const result = await addprodtocart(cid, cart);
+                const result = await cartService.addProdToCart(cid, cart);
 
                 if (!result) res.send('Error operación');
-                res.status(200).send({ status: 'success' });
-                return res.send(result);
+                return res.status(200).redirect('/home');
             }
 
         } catch (error) {
@@ -75,6 +95,7 @@ class CartController {
     };
 
     delProductToCart = async (req, res) => {
+        console.log(`Entre a del prod ${req.params.cid} y ${req.body}`)
         const cid = req.params.cid;
         const pid = req.params.pid;
         try {

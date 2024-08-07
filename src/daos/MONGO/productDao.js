@@ -15,7 +15,8 @@ export default class ProductsDao {
     };
 
     getProductsById = async (id) => {
-        return await this.productModel.findByIdAndUpdate(id);
+        console.log(`DAO ${id}`)
+        return await this.productModel.findById(id);
     };
 
     updateProduct = async (updatedProduct) => {

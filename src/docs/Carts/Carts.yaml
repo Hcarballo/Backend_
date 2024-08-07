@@ -1,0 +1,109 @@
+paths:
+  /api/cart/:
+    get:
+      sumary: Obtiene todos los carritos
+      tags:
+      - Carts
+      responses:
+        "200":
+          description: Los carritos fueron obtenidos correctamente desde la base de datos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
+        "500":
+          description: Error interno del servidor, query defectuosa o error de conexión con la base de datos
+  /api/cart/{cid}:
+    get:
+      sumary: Obtiene un carrito a traves de su ID
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description:  id del carrito que se desea solicitar
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Carrito encrontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Cart'   
+  /api/cart:
+    post:
+      sumary: Crea un nuevo carrito
+      tags:
+        - Carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/createCart'
+      responses:
+        "201":
+          description: El carrito fue creado con exito   
+                                   
+components:
+  schemas:
+    Product:
+      type: Object
+      properties:
+        product:
+          type: String
+          description: ID del producto
+        quantity:
+          type: Number
+          description: Cantidad del producto
+        unitprice:
+          type: Number
+          description: Precio unitario del producto
+        subtotal:
+          type: Number
+          description: Subtotal del monto a pagar
+
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID autogenerado de Mongo
+        user:
+          type: String
+          description: ID del usuario que generó el carrito
+        products:
+          type: array
+          items:
+            $ref: '#components/schemas/Product'
+        total:
+          type: Number
+          description: Monto total a pagar
+
+  requestBodies:
+    createCart:
+      content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/Cart'
+        example:
+          user: ObjectId(66677ac75284d4c13ceb277e)
+          products:
+            - product: ObjectId(664fcdda69807fd67f49b7a7)
+              quantity: 10
+              unitprice: 200
+              subtotal: 2000
+          total: 400000
+
+      example:
+        user: ObjectId(66677ac75284d4c13ceb277e)
+        products:
+          - product: ObjectId(664fcdda69807fd67f49b7a7)
+            quantity: 10
+            unitprice: 200
+            subtotal: 2000
+        total: 400000

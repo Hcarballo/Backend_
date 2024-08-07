@@ -1,0 +1,147 @@
+paths:
+  /api/products/:
+    get:
+      sumary: Obtiene todos los productos
+      tags:
+      - Products
+      responses:
+        "200":
+          description: Los productos fueron obtenidos correctamente desde la base de datos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del servidor, query defectuosa o error de conexión con la base de datos
+  /api/products/{pid}:
+    get:
+      sumary: Obtiene un producto a traves de su ID
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description:  id del producto que se desea solicitar
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Producto encrontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Product'   
+  /api/products:
+    post:
+      sumary: Crea un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/createProduct'
+      responses:
+        "201":
+          description: El producto fue creado con exito                            
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado de Mongo
+        codigo:
+          type: String
+          description: Codigo del producto
+        nombre:
+          type: String
+          description: Nombre del producto
+        imagen:
+          type: String
+          description: Imagen del producto  
+        uva:
+          type: String
+          description: Tipo de uva
+        bodega:
+          type: String
+          description: Bodega productora  
+        precio:
+          type: Number
+          description: Precio del producto
+        categoria:
+          type: String
+          description: Tipo de vino
+        stock:
+          type: String
+          description: Cantidad en stock
+        status: 
+          type: Boolean
+          description: Indicación de si el vino esta o no a la venta  
+        owner: 
+          type: String
+          description: Id de la persona que cargo el producto en la base      
+
+      example:
+        _id: ObjectId(aslkmas93840askmm2epskmlx)
+        codigo: V1001
+        nombre: Alto las Hormigas
+        imagen: sin imagen
+        uva: Malbec
+        bodega: Catena Zapata
+        precio: 15000
+        categoria: vino de mesa
+        stock: 10
+        status: true
+        owner: ObjectId(aslkmas93840askmm2epskmlx)   
+
+  requestBodies:
+    createProduct:
+      type: Object
+      properties:       
+        codigo:
+          type: String
+          description: Codigo del producto
+        nombre:
+          type: String
+          description: Nombre del producto
+        imagen:
+          type: String
+          description: Imagen del producto   
+        uva:
+          type: String
+          description: Tipo de uva
+        bodega:
+          type: String
+          description: Bodega productora  
+        precio:
+          type: Number
+          description: Precio del producto
+        categoria:
+          type: String
+          description: Tipo de vino
+        stock:
+          type: String
+          description: Cantidad en stock
+        status: 
+          type: Boolean
+          description: Indicación de si el vino esta o no a la venta  
+        owner: 
+          type: String
+          description: Id de la persona que cargo el producto en la base        
+      example:        
+        codigo: V1001
+        nombre: Alto las Hormigas
+        imagen: sin imagen
+        uva: Malbec
+        bodega: Catena Zapata
+        precio: 15000
+        categoria: vino de mesa
+        stock: 10
+        status: true
+        owner: aslkmas93840askmm2epskmlx

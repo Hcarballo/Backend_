@@ -2,10 +2,39 @@
     <h1>Bienvenido {{first_name}}</h1>
     <a href="/products">Productos</a>
     <a href="/register">Registro</a>
-
+    {{#if role}}
+    <a href="/users">Usuarios</a>
+    <form action="/api/cart" method="post">
+        <button type="submit">Crear carrito</button>
+    </form>
+    {{/if}}
     {{#if first_name}}
-        <a href="/api/sessions/logout">Logout</a>
+    <a href="/api/sessions/logout">Logout</a>
     {{else}}
-        <a href="/login">Login</a>
-    {{/if}}  
+    <a href="/login">Login</a>
+    {{/if}}
+    {{carrito.id}}
+    <section>
+        <h1>Listado de Productos</h1>
+        {{#each products}}
+        <div>
+            <p>Nombre: {{this.nombre}}</p>
+            <p>Uva: {{this.uva}}</p>
+            <p>Bodega: {{this.bodega}}</p>
+            <p>Precio: ${{this.precio}}</p>
+            <h4>Stock: {{this.stock}}</h4>
+            <form action="/detailProduct/{{this._id}}" method="post">
+                <button type="submit">Detalle</button>
+            </form>
+            <hr>
+        </div>
+        {{/each}}
+        {{#if hasPrevPage}}
+        <a href="/products?numpage={{prevPage}}">Anterior</a>
+        {{/if}}
+        <label>{{page}}</label>
+        {{#if hasNextPage}}
+        <a href="/products?numpage={{nextPage}}">Siguiente</a>
+        {{/if}}
+    </section>
 </main>
