@@ -80,10 +80,10 @@ class SessionController {
 
     restablecer = async (req, res) => {
         const { email } = req.body;
-        // const ifresult = await this.service.getUserEmail(email);
-        // if(!ifresult){
-        //     return res.status(401).send({ status: 'error', message: 'Usuario Inexistente' });
-        // }
+        const ifresult = await this.service.getUserEmail(email);
+        if (!ifresult) {
+            return res.status(401).send({ status: 'error', message: 'Usuario Inexistente' });
+        }
         const tokenreset = generateToken({
             email,
         });
@@ -92,8 +92,6 @@ class SessionController {
             httpOnly: true
         });
 
-
-
         const html = `<h1>Siga este enlace para restablecer su contraseña:</h1> <a href="/api/session/resetpassword/${tokenreset}">LINK</a>`;
         const result = await sendEmail(email, "Recupero de Contraseña", html);
         if (result) return res.send('Email enviado a su casilla');
@@ -101,7 +99,7 @@ class SessionController {
     }
 
     resetpassword = async (req, res) => {
-        //desarmar el token
+        
         const { email, newpassword } = req.body;
         try {
             const user = await this.service.getUserEmail(email);

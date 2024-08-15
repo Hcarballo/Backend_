@@ -10,7 +10,10 @@ const userSchema = new Schema({
     age: { type: Number, require: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    cardId: { type: Schema.Types.ObjectId, ref: 'carts' },
+    cardId: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'carts'
+     },
     role: {
         type: String,
         enum:['user','user-full','Premium'],

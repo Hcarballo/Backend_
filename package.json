@@ -4,7 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --watch src/server.js"
+    "start": "node --watch src/server.js",
+    "dev": "nodemon src/server.js",
+    "test_mocha": "mocha tests/mocha/Users.test.js",
+    "test_chai": "mocha tests/chai/Users.test.js",
+    "test_st": "mocha tests/supertest/Users.test.js",
+    "test_chai_product": "mocha tests/chai/Products.test.js",
+    "test_mocha_cart": "mocha tests/mocha/Carts.test.js",
+    "test_st_session": "mocha tests/supertest/Sessions.test.js"
   },
   "type": "module",
   "keywords": [],
@@ -12,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@nestjs/cli": "^10.4.4",
     "artillery": "^2.0.17",
     "bcrypt": "^5.1.1",
     "commander": "^12.1.0",
@@ -24,7 +32,6 @@
     "express-handlebars": "^7.1.2",
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
-    "mocha": "^10.7.0",
     "mongodb": "^6.6.1",
     "mongoose": "^8.3.4",
     "mongoose-paginate-v2": "^1.8.0",
@@ -40,5 +47,10 @@
     "swagger-ui-express": "^5.0.1",
     "sweetalert2": "^11.10.8",
     "winston": "^3.13.1"
+  },
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "supertest": "^7.0.0"
   }
 }
