@@ -1,8 +1,10 @@
 import { createHash, validatePass } from "../utils/bcrypt.js";
+import { parseJwt } from "../utils/jwt.js"
 import { generateToken } from "../utils/jwt.js";
 import { userService } from "../service/index.js";
 import UserController from "./users.controller.js";
 import { sendEmail } from "../utils/sendEmail.js";
+import { use } from "chai";
 
 class SessionController {
     constructor() {
@@ -16,7 +18,7 @@ class SessionController {
             return res.status(401).send({ status: 'error', message: 'Datos incompletos' });
         }
 
-        const userFound = await this.service.getUser({ email });
+        const userFound = await this.service.getUserEmail(email);
 
         if (!userFound) {
             return res.status(400).send({ status: 'error', error: 'Usuario no encontrado' })
@@ -27,6 +29,11 @@ class SessionController {
         if (!okPass) {
             return res.status(401).send({ status: 'error', message: 'No coinciden las credenciales' });
         }
+
+        const user = userFound;
+        user.last_connection = `Login - ${new Date().toLocaleString()}`;
+
+        await this.service.updateUser(userFound._id, user)
 
         const token = generateToken({
             id: userFound._id,
@@ -99,7 +106,7 @@ class SessionController {
     }
 
     resetpassword = async (req, res) => {
-        
+
         const { email, newpassword } = req.body;
         try {
             const user = await this.service.getUserEmail(email);
@@ -123,8 +130,14 @@ class SessionController {
         }
     };
 
-    logout = (req, res) => {
-        if (req.cookies.token) {
+    logout = async (req, res) => {
+        const userToken = parseJwt(req.cookies.token)
+        if (userToken) {
+            const user = userToken;
+            user.last_connection = `Logout - ${new Date().toLocaleString()}`;
+
+            await this.service.updateUser(userToken._id, user)
+
             res.clearCookie('token');
             if (req.cookies.tokenCart) {
                 res.clearCookie('tokenCart');

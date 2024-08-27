@@ -1,0 +1,22 @@
+<h1>Carga de Documentos</h1>
+
+<h2>Carga de DNI</h2>
+<form action="/api/users/{{id}}/documents" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="tipo" value="DNI">
+    <input type="file" name="file">
+    <button>Subir Archivo</button>
+</form>
+
+<h2>Comprobante Domicilio</h2>
+<form action="/api/users/{{id}}/documents" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="tipo" value="Domicilio">
+    <input type="file" name="file">
+    <button>Subir Archivo</button>
+</form>
+
+<h2>Comprobante Estado de Cuenta</h2>
+<form action="/api/users/{{id}}/documents" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="tipo" value="Cuenta">
+    <input type="file" name="file">
+    <button>Subir Archivo</button>
+</form>

@@ -6,6 +6,7 @@ import viewsController from "../Controllers/views.controller.js";
 const {
     home,
     users,
+    loaddocuments,
     products,
     realtimeproducts,
     restablecer,
@@ -21,6 +22,8 @@ const router = Router();
 router.get('/home', home )
 
 router.get('/users', passportCall('jwt'), authorization('admin'), users)
+
+router.get('/loaddocuments', loaddocuments)
 
 router.get('/products', products)
 

@@ -21,9 +21,9 @@ export default class UsersDao {
         }
     }
 
-    getUserBy = async (user) => {
+    getUserBy = async (uid) => {
         try {
-            return await this.userModel.findOne(user);
+            return await this.userModel.findById(uid);
         } catch (error) {
             console.log(error);
         }

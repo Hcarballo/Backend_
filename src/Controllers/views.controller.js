@@ -37,6 +37,11 @@ class viewsController {
         res.render('users', { users });
     }
 
+    loaddocuments = (req,res) => {
+        const {id} = parseJwt(req.cookies.token);        
+        res.render('loaddocuments',{id})
+    }
+
     products = async (req, res) => {
         const products = await productService.getProducts();
         res.render('products', { products });

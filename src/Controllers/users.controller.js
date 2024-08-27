@@ -1,5 +1,6 @@
 import { createHash } from "../utils/bcrypt.js";
 import { userService } from "../service/index.js";
+import { use } from "chai";
 
 class UserController {
     constructor() {
@@ -9,9 +10,9 @@ class UserController {
     getUsers = async (req, res) => {
         try {
             const users = await this.service.getUsers();
-            if (users.length == 0){
+            if (users.length == 0) {
                 return res.send('No hay Usuarios Registrados');
-            } 
+            }
             return res.send({ status: 'success', payload: users });
         } catch (error) {
             console.log(error);
@@ -75,8 +76,40 @@ class UserController {
         }
     };
 
-    updateUser = async (req,res) => {
-        
+    // updateUser = async (req, res) => {
+    // }
+
+    userPremium = async (req, res) => {
+        const uId = req.params.uid;
+        let result = null;
+        try {
+            const user = await this.service.getUser(uId);
+            if (user && user.checkPremium === 1) {
+                const userMod = user;
+                userMod.role = "Premium";
+                result = await this.service.updateUser(user._id, userMod);
+                if (!result) return res.send('Usuario No Modificado');
+            }
+            return res.send(result);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    userDocuments = async (req, res) => {
+        const tipo = req.body.tipo;
+        console.log(tipo);
+        console.log(req.params.uid);
+        console.log(req.file.filename)
+        if (!req.file) {
+            return res.send('Error al subir el archivo');
+        }
+        const user = await this.service.getUser(req.params.uid);
+        const name = req.file.filename;
+        const reference = req.file.destination;
+        user.documents.push(name, reference);
+        await this.service.updateUser(user._id, user);
+        return res.send('Archivo ok');
     }
 
 
