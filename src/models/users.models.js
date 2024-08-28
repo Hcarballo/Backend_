@@ -23,7 +23,8 @@ const userSchema = new Schema({
         type: [{
             document: {
                 name: String,
-                reference: String
+                reference: String,
+                tipo: String
             }
         }]
     },

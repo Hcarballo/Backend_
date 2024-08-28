@@ -97,20 +97,37 @@ class UserController {
     }
 
     userDocuments = async (req, res) => {
-        const tipo = req.body.tipo;
-        console.log(tipo);
-        console.log(req.params.uid);
-        console.log(req.file.filename)
+
         if (!req.file) {
             return res.send('Error al subir el archivo');
         }
         const user = await this.service.getUser(req.params.uid);
         const name = req.file.filename;
         const reference = req.file.destination;
-        user.documents.push(name, reference);
+        const tipo = req.body.tipo;
+        user.documents.push({ document: { name, reference, tipo } });
         await this.service.updateUser(user._id, user);
+        this.checkDocument(user._id);
         return res.send('Archivo ok');
     }
+
+    checkDocument = async (uid) => {
+        const user = await this.service.getUser(uid);
+
+        const isDNI = user.documents.some(doc => doc.document.tipo === "DNI");
+        const isDomicilio = user.documents.some(doc => doc.document.tipo === "Domicilio");
+        const isCuenta = user.documents.some(doc => doc.document.tipo === "Cuenta");
+        
+        if (isDNI && isDomicilio && isCuenta) {
+            user.checkPremium = true;
+            await this.service.updateUser(user._id, user);
+            console.log('El usuario subió los 3 archivos');
+            return;
+        }
+        console.log('No cargó todo');
+        return;
+    };
+
 
 
     edad = (date_born) => {
