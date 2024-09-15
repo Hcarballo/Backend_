@@ -44,4 +44,12 @@ export default class UsersDao {
             console.log(error);
         }
     }
+
+    deleteUser = async (user) => {
+        try {
+           return await this.userModel.deleteOne(user);            
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }

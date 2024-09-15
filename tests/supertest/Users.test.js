@@ -33,10 +33,7 @@ describe('Test de e-Wine', ()=>{
                 ok,
                 _body
             } = await requester.get('/api/users');
-            
-            console.log(statusCode);
-            console.log(ok);
-            console.log(_body);
+                        
             expects(ok).to.be.equal(true);
             expects(statusCode).to.be.equal(200);
         })
@@ -47,11 +44,8 @@ describe('Test de e-Wine', ()=>{
                 statusCode,
                 ok,
                 _body
-            } = await requester.get(`/api/users/${uid}`);
-            
-            console.log(statusCode);
-            console.log(ok);
-            console.log(_body);
+            } = await requester.get(`/api/users/${uid}`);            
+           
             expects(ok).to.be.equal(true);
             expects(statusCode).to.be.equal(200);
         })

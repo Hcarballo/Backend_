@@ -2,8 +2,6 @@ import ProductDao from "../daos/MONGO/productDao.js"
 import { cartService } from "../service/index.js";
 import { generateToken, parseJwt } from "../utils/jwt.js";
 
-
-
 const {
     getProductsById
 } = new ProductDao();
@@ -23,31 +21,35 @@ class CartController {
     };
 
     createCart = async (req, res) => {
-        console.log('Entre Mal')
         try {
-            let user = null;
-            if (req.cookies.token) {
-                user = parseJwt(req.cookies.token);
-            }
-            const cart = {
-                user: user.id,
-                products: [],
-                total: 0
-            }
-            const result = await this.cartService.createCart(cart);
+            if (!req.cookies.tokenCart) {
+                let user = null;
+                if (req.cookies.token) {
+                    const founduser = parseJwt(req.cookies.token);
+                    user = founduser.id;
+                }
+                const cart = {
+                    user: user,
+                    products: [],
+                    total: 0,
+                    status: "Pendiente"
+                }
+                const result = await this.cartService.createCart(cart);
 
-            const tokenCart = generateToken({
-                id: result.id
-            })
-            res.cookie('tokenCart', tokenCart, {
-                maxAge: 60 * 60 * 1000 * 24
-            })
-            console.log('carro agregado');
-            res.status(200).redirect('/home');
+                const tokenCart = generateToken({
+                    id: result._id,
+                });
+
+                res.cookie('tokenCart', tokenCart, {
+                    maxAge: 60 * 60 * 1000 * 24,
+                })
+            }
+            res.status(200).json({ message: 'Carrito creado exitosamente' });
         } catch (error) {
             console.log(error);
-        };
-    };
+            res.status(500).json({ error: 'Error al crear el carrito' });
+        }
+    }
 
     getCartByID = async (req, res) => {
         try {
@@ -63,30 +65,31 @@ class CartController {
         } catch (error) {
             console.log(error);
         }
-    };
+    }
 
     addProductToCart = async (req, res) => {
-        const cid = req.params.cid;
-        console.log(`estos son ${cid}`)
+        const cart = parseJwt(req.cookies.tokenCart);
         const { pid, quantity } = req.body;
-        console.log(`estos son ${pid} y ${quantity}`)
         try {
-            const cart = await this.cartService.getCartByID(cid);
-            if (!cart) {
-                return res.send('Carro Inexistente');
-            }
+            const cartfound = await this.cartService.getCartByID(cart.id);
+            if (!cartfound)
+                return res.status(404).json({ message: 'Carrito no encontrado' });
             else {
                 let product = await getProductsById(pid);
+                const image = product.imagen;
+                const name = product.nombre;
                 const unitprice = product.precio;
                 const subtotal = product.precio * quantity;
-                cart.total = cart.total + product.precio * quantity;
-                console.log(`Producto: ${pid} - Cantidad: ${quantity} - Precio Uni: ${unitprice} - Subtotal: ${subtotal} - Total: ${cart.total} - ID: ${cart._id}`)
-                cart.products.push({ product: pid, quantity, unitprice, subtotal });
+                cartfound.total = cartfound.total + product.precio * quantity;
 
-                const result = await cartService.addProdToCart(cid, cart);
+                cartfound.products.push({ product: pid, image, name, quantity, unitprice, subtotal });
 
-                if (!result) res.send('Error operación');
-                return res.status(200).redirect('/home');
+                const result = await cartService.addProdToCart(cart.id, cartfound);
+
+                if (!result) {
+                    return res.send('Error operación');
+                }
+                return res.status(200).redirect('/cart');
             }
 
         } catch (error) {
@@ -95,37 +98,37 @@ class CartController {
     };
 
     delProductToCart = async (req, res) => {
-        console.log(`Entre a del prod ${req.params.cid} y ${req.body}`)
-        const cid = req.params.cid;
+        const cart = parseJwt(req.cookies.tokenCart);
         const pid = req.params.pid;
+
         try {
-            const cart = await this.cartService.getCartByID(cid);
-            if (!cart) return res.send('El carrito no existe');
+            const cartfound = await this.cartService.getCartByID(cart.id);
+            if (!cartfound) {
+                return res.status(404).send('El carrito no existe');
+            }
 
-            const productIndex = cart.products.findIndex(product => product.pid.toString() === pid);
+            const productIndex = cartfound.products.findIndex(product => product.product.toString() === pid);
+
             if (productIndex === -1) {
-                throw new Error('Producto no encontrado en el carrito');
-            }
-            cart.total = cart.total - cart.products[productIndex].subtotal;
-            cart.products.splice(productIndex, 1);
-
-            if (!result) {
-                return res.send('El producto no existe');
-            }
-            else {
-                res.status(200).send({ status: 'success' });
-                return res.send(result);
+                return res.status(404).send('Producto no encontrado en el carrito');
             }
 
+            cartfound.total -= cartfound.products[productIndex].subtotal;
+            cartfound.products.splice(productIndex, 1);
+            await this.cartService.delprodtocart(cart.id, cartfound);
+
+            return res.status(200).send({ status: 'success' });
         } catch (error) {
             console.log(error);
+            return res.status(500).send('Error interno del servidor');
         }
     };
+
 
     deleteCart = async (req, res) => {
         try {
             const cid = req.params.cid;
-            const result = this.cartService.deletecart(cid);
+            const result = this.cartService.deleteCart(cid);
             if (!result) {
                 res.send('Error');
             }
@@ -136,6 +139,19 @@ class CartController {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    deletecarts = async (req, res) => {
+        const carts = await this.cartService.getCarts();
+        if (carts.length <= 0) {
+            return;
+        }
+        carts.forEach(async (cart) => {
+            const usernull = cart.user;
+            if (!usernull) {
+                await this.cartService.deleteCart(cart._id);
+            }
+        });
     };
 }
 

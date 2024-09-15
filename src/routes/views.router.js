@@ -6,6 +6,7 @@ import viewsController from "../Controllers/views.controller.js";
 const {
     home,
     users,
+    cart,
     loaddocuments,
     products,
     realtimeproducts,
@@ -14,12 +15,15 @@ const {
     chat,
     detailProduct,
     login,
-    register
+    register,
+    updateuser
 } = new viewsController();
 
 const router = Router();
 
 router.get('/home', home )
+
+router.get('/cart', cart)
 
 router.get('/users', passportCall('jwt'), authorization('admin'), users)
 
@@ -27,7 +31,7 @@ router.get('/loaddocuments', loaddocuments)
 
 router.get('/products', products)
 
-router.post('/detailProduct/:pid', detailProduct)
+router.get('/detailProduct/:pid', detailProduct)
 
 router.get('/realTimeProducts', realtimeproducts)
  
@@ -40,6 +44,8 @@ router.get('/register', register)
 router.get('/restablecer', restablecer)
 
 router.get('/resetpassword', resetpassword)
+
+router.post('/updateuser/:uid', updateuser)
 
 //_____________Pruebas de Logger_______________
 router.get('/logger_warning',(req,res)=>{

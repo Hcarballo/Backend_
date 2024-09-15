@@ -4,7 +4,6 @@ import { generateToken } from "../utils/jwt.js";
 import { userService } from "../service/index.js";
 import UserController from "./users.controller.js";
 import { sendEmail } from "../utils/sendEmail.js";
-import { use } from "chai";
 
 class SessionController {
     constructor() {
@@ -18,7 +17,7 @@ class SessionController {
             return res.status(401).send({ status: 'error', message: 'Datos incompletos' });
         }
 
-        const userFound = await this.service.getUserEmail(email);
+        const userFound = await this.service.getUserEmail(email);        
 
         if (!userFound) {
             return res.status(400).send({ status: 'error', error: 'Usuario no encontrado' })
@@ -39,7 +38,8 @@ class SessionController {
             id: userFound._id,
             email,
             role: userFound.role,
-            first_name: userFound.first_name
+            first_name: userFound.first_name,
+            foto_perfil: userFound.foto_perfil
         });
 
         res.cookie('token', token, {
@@ -62,7 +62,8 @@ class SessionController {
             first_name,
             last_name,
             age: userManager.edad(date_born),
-            email,
+            email,            
+            last_connection: `Login - ${new Date().toLocaleString()}`,
             password: createHash(password)
         }
 
@@ -150,7 +151,6 @@ class SessionController {
     };
 
     funcPassport = async (req, res) => {
-        console.log(req.user)
         return res.send('Datos sensibles');
     };
 }

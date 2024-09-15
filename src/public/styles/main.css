@@ -1,0 +1,363 @@
+@import url('registro.css');
+@import url('user.css');
+@import url('session.css');
+
+@font-face {
+    font-family: Anuphan;
+    src: url(../font/Anuphan.ttf);
+}
+
+body {
+    margin: 0;
+    padding: 2%;
+    height: 100vh;
+    background: url(../image/Background_princ.webp) no-repeat center center fixed;
+    background-size: cover;
+}
+
+/*---------------*/
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.logo {
+    margin: 0;
+}
+
+.spaceuser {
+    display: flex;
+    align-items: center;
+}
+
+.user-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+hr {
+    border: 1px solid white;
+    margin-top: 0;
+}
+
+/*---------------*/
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end;
+    margin: 10% 0 0 0;
+}
+
+.redes img {
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    margin: 3px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+tr,
+.registro label,
+a {
+    font-family: Anuphan;
+    color: white;
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 400%;
+}
+
+p {
+    text-align: justify;
+}
+
+.navbar {
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
+    .collapse {
+        .navbar-collapse {
+            flex-grow: inherit;
+        }
+    }
+
+
+    a {
+        color: white;
+    }
+
+    .navbar-toggler {
+        border-color: white;
+    }
+
+    .navbar-toggler-icon {
+        color: white;
+    }
+
+    .span .navbar-toggler-icon {
+        color: white;
+    }
+
+
+    .nav-link:focus,
+    .nav-link:hover {
+        color: blanchedalmond;
+    }
+
+}
+/* ------Carrito------ */
+.cart-container {
+    display: inline-block;
+    position: relative;
+    align-items: center;
+}
+
+.cart-button {    
+    width: 50px;
+    height: 30px;
+    padding-left: 10px;
+    margin-bottom: 3px;
+}
+
+.cart-container p {
+    margin: 0;
+    padding-left: 10px; /* Espacio entre el ID del carrito y el precio */
+}
+
+.cart-total{
+    width: 30px;
+}
+
+.cart-count {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 3px;
+    font-size: 8px;
+}
+/* -----------Productos---------------- */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.product-item {
+    border: 1px solid rgba(249, 249, 249, 0.1);
+    padding: 10px;
+    background-color: rgba(249, 249, 249, 0.1);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+.product-item:hover {
+    transform: scale(1.05);
+}
+
+.product-item img {
+    max-width: 100%;
+    height: auto;
+    width: 150px;
+    height: 210px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.product-item p, .product-item h4 {
+    margin: 2px 0;
+    padding: 0;
+}
+
+.product-item button {
+    background-color: #51111a;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 0.8em;
+    margin-top: 10px;/
+}
+
+.product-item button:hover {
+    background-color: #60241b;
+}
+
+/* -----------Barra buscar------------ */
+h2, .search-container {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.search-container {
+    margin-left: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Estilos para el modal */
+.modal {
+    display: none;
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100% auto; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.8); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 3% auto; 
+    padding: 5px;
+    border: 1px solid #888;
+    width: 80%; 
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilos adicionales para el contenido del modal */
+label{
+    color: white;
+}
+.product-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-image {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.product-details {
+    flex: 2;
+}
+
+.imgModal {
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s ease; 
+}
+
+/*-----Aumentar imagen-------*/
+.imgModal:hover {
+    transform: scale(2);
+}
+
+.cart-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.quantity-subtotal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cart-form label {
+    font-weight: bold;
+}
+
+.cart-form input{
+    width: 100px;
+    padding: 5px;
+}
+
+.cart-form button {
+    padding: 10px;
+    background-color: #51111a;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.cart-form button:hover {
+    background-color: #60241b;
+}
+
+.quantity-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.quantity-buttons button {
+    padding: 5px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 30px;
+}
+
+.quantity-buttons button:hover {
+    background-color: #007bb5;
+}
+
+.cart-form input[type="number"]::-webkit-outer-spin-button,
+.cart-form input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

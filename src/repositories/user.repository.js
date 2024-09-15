@@ -14,7 +14,7 @@ export default class UserRepository {
 
     createUser = async (user) => {
         const newUser = new UserDto(user);
-        const result = await this.userDao.createUser(newUser);
+        const result = await this.userDao.createUser(user);
         return (result);
     }
 
@@ -22,5 +22,6 @@ export default class UserRepository {
         const result = await this.userDao.updateUser(user, userToUpdate);
         return (result)
     }
-    //deleteUser = async uid => await this.userDao.deleteUser(uid);
+
+    deleteUser = async uid => await this.userDao.deleteUser(uid);
 }

@@ -14,13 +14,13 @@ const router = Router();
 
 router.get('/', getCart);
 
-router.post('/', createCart);
+router.get('/create', createCart);
 
 router.get('/:cid', getCartByID);
 
-router.post('/:cid', addProductToCart);
+router.post('/product', addProductToCart);
 
-router.delete('/:cid/product/:pid', delProductToCart);
+router.delete('/product/:pid', delProductToCart);
 
 router.delete('/:cid', deleteCart);
 

@@ -9,10 +9,10 @@ const {
     getUserBy,
     createUser,
     userPremium,
-    userDocuments,
+    userDocuments,    
+    deleteUser,
     //getUserByEmail,
     //updateUser,
-    //deleteUser
 } = new UserController();
 
 
@@ -22,7 +22,7 @@ router.get('/:uid', getUserBy);
 router.post('/', createUser);
 router.post('/premium/:uid', userPremium);
 router.post('/:uid/documents',uploader.single('file'), userDocuments);
+router.post('/deleteuser/:uid', deleteUser);
 //router.get('/:uid', updateUser);
-//router.get('/:uid', deleteUser);
 
 export default router;

@@ -11,11 +11,9 @@ class Singleton{
 
     static getInstance(){
         if(this.#instance){
-            console.log("ya creada la conexión");
             return this.#instance;
         }
         this.#instance = new Singleton();
-        console.log("Conectado x singleton");
         return this.#instance;
     }
 }

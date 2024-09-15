@@ -4,16 +4,18 @@ import { Schema, model } from "mongoose";
 const userCollection = 'users';
 
 const userSchema = new Schema({
-    fullname: { type: String, required: true },
+    fullname: { type: String},
     first_name: { type: String, required: true },
     last_name: { type: String, required: true },
     age: { type: Number, require: true },
+    foto_perfil:{ type: String, default: null},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     cardId: {
         type: Schema.Types.ObjectId,
-        ref: 'carts'
-    },
+        ref: 'carts',
+        default: null
+    },    
     role: {
         type: String,
         enum: ['user', 'user-full', 'Premium'],

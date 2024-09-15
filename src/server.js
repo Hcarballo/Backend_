@@ -1,24 +1,30 @@
 import express from 'express';
-import { __dirname } from './utils/utils.js';
 import handlebars from 'express-handlebars';
+import passport from 'passport';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import routerApp from './routes/index.js';
+import swaggerUIExpress from 'swagger-ui-express';
+import UserController from '../src/Controllers/users.controller.js'
+import CartController from './Controllers/carts.controller.js';
+import swaggerJSDoc from 'swagger-jsdoc';
+import paymentsRouter from './routes/payments.router.js';
+import { __dirname } from './utils/utils.js';
 import { productsSocket } from './public/js/productsSocket.js';
 import { Server as ServerIO } from 'socket.io';
 import { Server as ServerHttp } from 'http';
-import passport from 'passport';
-import cookieParser from 'cookie-parser';
 import { initializePassport } from './config/passport.config.js';
 import { objectConfig } from './config/index.js';
-import cors from 'cors';
-import routerApp from './routes/index.js';
 import { sendMessages } from '../src/utils/sendMessages.js';
 import { addLogger } from './utils/logger.js';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUIExpress from 'swagger-ui-express';
+import { schedule } from 'node-cron';
 
 const app = express();
 const httpServer = new ServerHttp(app);
 const io = new ServerIO(httpServer);
 const { port } = objectConfig;
+const user = new UserController();
+const cart = new CartController();
 
 const swaggerOptions = {
     definition: {
@@ -34,13 +40,21 @@ const swaggerOptions = {
 const specs = swaggerJSDoc(swaggerOptions);
 app.use('/apidocs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs))
 
-
+//----------------Programación de tareas------------------
+schedule('59 23 * * *', () => {
+    console.log('Ejecutando tarea programada');
+    user.deleteUsers();
+    cart.deletecarts();
+});
+//----------------------------------------------------------
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 app.use(cors());
 app.use(addLogger);
+
+app.use('/api/payments', paymentsRouter)
 
 app.use(productsSocket(io));
 
@@ -50,6 +64,7 @@ app.use(passport.initialize());
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
+
 
 app.use(routerApp);
 

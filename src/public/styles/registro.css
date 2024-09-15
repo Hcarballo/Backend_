@@ -1,0 +1,15 @@
+.button-session {
+    background-color: #51111a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 0.8em;
+    margin-top: 20px;/
+}
+
+.button-session:hover {
+    background-color: #60241b;
+}

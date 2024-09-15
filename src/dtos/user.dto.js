@@ -4,6 +4,7 @@ export default class UserDto {
         this.last_name = user.last_name;
         this.email = user.email;
         this.password = user.password;
-        this.fullname = `${user.first_name} ${user.last_name}`
+        this.fullname = `${user.first_name} ${user.last_name}`,
+        this.last_connection = user.last_connection;
     }
 }

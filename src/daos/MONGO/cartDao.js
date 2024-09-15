@@ -21,13 +21,11 @@ export default class CartsDao {
         return await this.cartModel.findByIdAndUpdate({ _id: cid }, cart);
     }
 
-
-    delprodtocart = async (cid, cart) => {
+    delprodtocart = async (cid, cart) => {       
         return await this.cartModel.findOneAndUpdate({ _id: cid }, cart);
     }
 
     deletecart = async (cid) => {
-        await this.cartModel.findByIdAndDelete(cid);
-        return;
+        return await this.cartModel.findByIdAndDelete(cid);        
     }
 }

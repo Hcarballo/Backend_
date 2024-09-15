@@ -1,6 +1,7 @@
 import { createHash } from "../utils/bcrypt.js";
 import { userService } from "../service/index.js";
-import { use } from "chai";
+import { parse } from "date-fns";
+import { sendEmail } from "../utils/sendEmail.js";
 
 class UserController {
     constructor() {
@@ -36,6 +37,7 @@ class UserController {
                 last_name: last_name,
                 age: this.edad(date),
                 email: email,
+                last_connection: `Login - ${new Date().toLocaleString()}`,
                 password: createHash(password)
             }
 
@@ -66,7 +68,7 @@ class UserController {
     getUserByEmail = async (req, res) => {
         const { email } = req.params;
         try {
-            const result = await this.service.getUserByEmail(email);
+            const result = await this.service.getUserEmail(email);
             if (!result) {
                 return res.send('Usuario no encontrado');
             }
@@ -76,8 +78,9 @@ class UserController {
         }
     };
 
-    // updateUser = async (req, res) => {
-    // }
+    updateuser = async (req, res) => {
+        return (console.log("NOOOO"))
+    }
 
     userPremium = async (req, res) => {
         const uId = req.params.uid;
@@ -117,18 +120,15 @@ class UserController {
         const isDNI = user.documents.some(doc => doc.document.tipo === "DNI");
         const isDomicilio = user.documents.some(doc => doc.document.tipo === "Domicilio");
         const isCuenta = user.documents.some(doc => doc.document.tipo === "Cuenta");
-        
+
         if (isDNI && isDomicilio && isCuenta) {
             user.checkPremium = true;
             await this.service.updateUser(user._id, user);
             console.log('El usuario subió los 3 archivos');
             return;
         }
-        console.log('No cargó todo');
         return;
     };
-
-
 
     edad = (date_born) => {
         const hoy = new Date();
@@ -138,6 +138,38 @@ class UserController {
         const edad = Math.floor(edadEnMilisegundos / milisegundosEnUnAnio);
         return edad;
     };
+
+    deleteUsers = async (req, res) => {
+        const set = 1; //Setear hora de inactividad
+        const users = await this.service.getUsers();
+        const now = new Date();
+        if (users.length <= 0) {
+            return;
+        }
+        users.forEach(async (user) => {
+            const html = '<h4>Usted fue dado de baja del sistema por inactividad</h4>'
+            const lastConnectionString = user.last_connection.split(" - ")[1];
+            const lastConnection = parse(lastConnectionString, 'dd/MM/yyyy, HH:mm:ss', new Date());
+            const diffHours = (now - lastConnection) / (1000 * 60 * 60);
+
+            if (user.role === 'user' || diffHours < set) {
+                const del = await this.service.deleteUser(user.id);
+                if (del) {
+                    await sendEmail(user.email, "Usuario Eliminado", html);                                        
+                }
+            }
+        });
+    };
+
+    deleteUser = async (req, res) => {
+        const user = req.params.id;
+        try {
+            await this.service.deleteUser(user);
+            return res.redirect('/users');
+        } catch (error) {
+            return res.redirect('/users');
+        }
+    }
 }
 
 export default UserController;

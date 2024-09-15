@@ -1,0 +1,31 @@
+<main>
+    <h3>Editar Usuario</h3>
+    <form action="/updateuser/{{user._id}}" method="POST">
+        <div>
+            <label for="first_name">Nombre:</label>
+            <input type="text" id="first_name" name="first_name" value="{{user.first_name}}" required>
+        </div>
+        <div>
+            <label for="last_name">Apellido:</label>
+            <input type="text" id="last_name" name="last_name" value="{{user.last_name}}" required>
+        </div>
+        <div>
+            <label for="date_born">Fecha de Nacimiento:</label>
+            <input type="date" id="date_born" name="date_born" value="{{user.date_born}}">
+        </div>
+        <div>
+            <label for="foto_perfil">Foto de Perfil:</label>
+            <input type="file" id="foto_perfil" name="foto_perfil">
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{user.email}}" required>
+        </div>
+       
+        <div>
+            <label for="checkPremium">Premium:</label>
+            <input type="checkbox" id="checkPremium" name="checkPremium" {{#if user.checkPremium}}checked{{/if}}>
+        </div>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+</main>

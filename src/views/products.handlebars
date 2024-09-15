@@ -1,16 +1,18 @@
 <main>
     <h1>Listado de Productos</h1>
     <a href="/home">Home</a>
-    {{#each products}}
-    <div>
-        <p>id: {{this._id}}</p>
-        <p>Nombre: {{this.nombre}}</p>
-        <p>Uva: {{this.uva}}</p>
-        <p>Bodega: {{this.bodega}}</p>
-        <p>Precio: ${{this.precio}}</p>
-        <hr>
+    <div class="product-grid">
+        {{#each products}}
+        <div class="product-item">
+            <p>id: {{this._id}}</p>
+            <p>Nombre: {{this.nombre}}</p>
+            <p>Uva: {{this.uva}}</p>
+            <p>Bodega: {{this.bodega}}</p>
+            <p>Precio: ${{this.precio}}</p>
+            <hr>
+        </div>
+        {{/each}}
     </div>
-    {{/each}}
     {{#if hasPrevPage}}
     <a href="/products?numpage={{prevPage}}">Anterior</a>
     {{/if}}

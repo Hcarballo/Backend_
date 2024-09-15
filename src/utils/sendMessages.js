@@ -15,7 +15,6 @@ export const sendMessages = (io) => {
                 hour: String(`${date.getHours()}:${date.getMinutes()}`)
             }
             await messageModel.create(_msg);
-            console.log('message:', data);
 
             msgs.push(data);
 

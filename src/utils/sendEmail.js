@@ -15,14 +15,14 @@ const transport = nodemailer.createTransport({
 
 export const sendEmail = async (email, subject, html ) => {    
     return await transport.sendMail({
-        from: 'Hernán Test <hernan.carballo77@gmail.com>',
+        from: 'System Info - eWine <hernan.carballo77@gmail.com>',
         to: email,
         subject,
         html,
         // attachments: [{
-        //     filename: 'lala',
-        //     path: 'lala.js',
-        //     cid: 'lala'
+        //     filename: '',
+        //     path: '',
+        //     cid: ''
         // }]
     })
 }

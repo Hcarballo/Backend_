@@ -5,21 +5,23 @@ const cartCollection = 'carts';
 const cartSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'users', 
-        required: true
+        ref: 'users',
       },
     products: {
         type: [{
             product: {
                 type: Schema.Types.ObjectId,
-                ref: 'products',
+                 ref: 'products',
             },
+            image: String,
+            name: String,
             quantity: Number,
             unitprice: Number,
             subtotal: Number
         }]
     },
-    total: Number
+    total: Number,
+    status: String
 })
 
 cartSchema.pre('find', function () {
