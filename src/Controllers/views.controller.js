@@ -27,13 +27,20 @@ class viewsController {
         try {
             const uid = req.params.uid;
             const user = await userService.getUser(uid);
-            console.log(`Entre para actualizar ${user}`);
-            return res.render('updateuser', { user });
+            return res.render('updateuser', { 
+                Nombre: user.first_name,
+                 Apellido: user.last_name, 
+                 Fecha_Nac: user.birthday,
+                 Foto_Perfil_URL: user.foto_perfil,
+                 Email:user.email,
+                 Role:user.role,
+                Checkpremium: user.checkPremium  });
         } catch (error) {
             console.log(error);
             return res.status(500).send('Error interno del servidor');
         }
     }
+    
 
     cart = async (req, res) => {
         try {
@@ -61,7 +68,7 @@ class viewsController {
                     isModal
                 });
             }
-            return res.status(500).send('Error interno del servidor');
+            return res.status(500).send('');
         } catch (error) {
             console.log(error);
             return res.status(500).send('Error interno del servidor');

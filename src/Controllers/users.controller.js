@@ -2,6 +2,8 @@ import { createHash } from "../utils/bcrypt.js";
 import { userService } from "../service/index.js";
 import { parse } from "date-fns";
 import { sendEmail } from "../utils/sendEmail.js";
+import { da } from "@faker-js/faker";
+import { use } from "chai";
 
 class UserController {
     constructor() {
@@ -78,22 +80,52 @@ class UserController {
         }
     };
 
-    updateuser = async (req, res) => {
-        return (console.log("NOOOO"))
+    updateUser = async (req, res) => {
+        try {
+            const uid = req.params.uid;
+            const user = await this.service.getUser(uid);
+            const {
+                first_name,
+                last_name,
+                date,
+                foto_perfil,
+                email,
+                checkPremium,
+                role
+            } = req.body;
+
+            if (!first_name || !last_name || !date || !email) return res.send('Datos Incompletos');
+
+            user.first_name = first_name;
+            user.last_name = last_name;
+            user.age = this.edad(date);
+            user.foto_perfil = foto_perfil;
+            user.email = email;
+            user.checkPremium = checkPremium;
+            user.role = role;
+
+            result = await this.service.updateUser(user._id, user);
+            if (!result) return res.send('Usuario No Modificado');
+            return res.send(result);
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     userPremium = async (req, res) => {
-        const uId = req.params.uid;
-        let result = null;
         try {
+            const uId = req.params.uid;
             const user = await this.service.getUser(uId);
-            if (user && user.checkPremium === 1) {
-                const userMod = user;
-                userMod.role = "Premium";
-                result = await this.service.updateUser(user._id, userMod);
-                if (!result) return res.send('Usuario No Modificado');
+            const userMod = user;
+            if (user.checkPremium === false) {
+                userMod.checkPremium = true;
+            } else {
+                userMod.checkPremium = false;
             }
-            return res.send(result);
+            const result = await this.service.updateUser(user._id, userMod);            
+            if (!result) return res.json({ success: false, message: 'Usuario no encontrado' });
+            return res.json({ success: true, result });
         } catch (error) {
             console.log(error);
         }
@@ -155,7 +187,7 @@ class UserController {
             if (user.role === 'user' || diffHours < set) {
                 const del = await this.service.deleteUser(user.id);
                 if (del) {
-                    await sendEmail(user.email, "Usuario Eliminado", html);                                        
+                    await sendEmail(user.email, "Usuario Eliminado", html);
                 }
             }
         });

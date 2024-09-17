@@ -40,6 +40,7 @@ export default class UsersDao {
     updateUser = async (user, userToUpdate) => {
         try {
             return await this.userModel.findOneAndUpdate(user,userToUpdate);
+           
         } catch (error) {
             console.log(error);
         }

@@ -1,34 +1,18 @@
-import {Swal} from 'sweetalert2'
-
-const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: "btn btn-success",
-      cancelButton: "btn btn-danger"
+function updatePremium(userId, isChecked) {
+  fetch(`/api/users/premium/${userId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
     },
-    buttonsStyling: false
-  });
-  swalWithBootstrapButtons.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delete it!",
-    cancelButtonText: "No, cancel!",
-    reverseButtons: true
-  }).then((result) => {
-    if (result.isConfirmed) {
-      swalWithBootstrapButtons.fire({
-        title: "Deleted!",
-        text: "Your file has been deleted.",
-        icon: "success"
-      });
-    } else if (
-      result.dismiss === Swal.DismissReason.cancel
-    ) {
-      swalWithBootstrapButtons.fire({
-        title: "Cancelled",
-        text: "Your imaginary file is safe :)",
-        icon: "error"
-      });
-    }
-  });
+    body: JSON.stringify({ checkPremium: isChecked })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('Usuario actualizado correctamente');
+      } else {
+        console.error('Error al actualizar el usuario');
+      }
+    })
+    .catch(error => console.error('Error:', error));
+}

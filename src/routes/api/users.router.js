@@ -12,7 +12,7 @@ const {
     userDocuments,    
     deleteUser,
     //getUserByEmail,
-    //updateUser,
+    updateUser,
 } = new UserController();
 
 
@@ -23,6 +23,6 @@ router.post('/', createUser);
 router.post('/premium/:uid', userPremium);
 router.post('/:uid/documents',uploader.single('file'), userDocuments);
 router.post('/deleteuser/:uid', deleteUser);
-//router.get('/:uid', updateUser);
+router.post('/updateuser/:uid', updateUser);
 
 export default router;
