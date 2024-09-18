@@ -1,12 +1,19 @@
 <main>
-    <h3>Detalle Compra</h3>
-    <h4># Factura: {{id}}</h4>
-    <h4>    Total: ${{total}}</h4>
+    <div class="invoice-header">
+        <h3>Factura de Compra</h3>
+        <h6>ID de Factura:{{id}}</h6>
+    </div>
+
+    <div class="invoice-details">
+        <h6>Fecha: {{date}}</h6>
+        <h6>Cliente: {{first_name}}</h6>
+    </div>
+
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">        </th>
+                <th scope="col"> </th>
                 <th scope="col">Producto</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col">Precio U</th>
@@ -15,26 +22,18 @@
             </tr>
         </thead>
         <tbody>
-            {{#each products}}
+            {{#each cartitem}}
             <tr>
                 <th scope="row">{{@index}}</th>
-                <td><img src="{{this.image}}" alt="{{this.name}}" style="width: 50px; height: 50px;"></td>
                 <td>{{this.name}}</td>
                 <td>{{this.quantity}}</td>
                 <td>{{this.unitprice}}</td>
                 <td>{{this.subtotal}}</td>
-                <td>
-                    <button class="btn btn-danger btn-sm del-btn" data-pid="{{this.product}}">Eliminar</button>
-                </td>
             </tr>
             {{/each}}
         </tbody>
     </table>
-    {{#if products}}
-    <button class="btn btn-success fin-compra" id="fin-compra">Finalizar Compra</button>
-    {{/if}}
-    <button class="btn btn-info continuar-compra">Continuar Compra</button>
+    <div class="invoice-total">
+        <span>{{total}}</span>
+    </div>
 </main>
-
-
-<script src="/js/scriptCart.js"></script>

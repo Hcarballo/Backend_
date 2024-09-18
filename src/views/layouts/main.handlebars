@@ -22,8 +22,7 @@
         <h1 class="logo">More Wine</h1>
         <div class="spaceuser">
             {{#if dataInit.first_name}}
-            <img src={{dataInit.foto_perfil}}
-                class="user-photo">
+            <img src={{dataInit.foto_perfil}} class="user-photo">
             <h6>{{dataInit.first_name}}</h6>
             <a href="/api/sessions/logout">Logout</a>
             {{else}}
@@ -61,15 +60,16 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="proximascatas">Próximas Catas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/products">Productos</a>
-                </li>
-                {{#if dataInit.role}}
+                </li>                
+                {{#if dataInit.checkrole}}
                 <li class="nav-item"></li>
-                <a class="nav-link" href="/users">Usuarios</a>
+                    <a class="nav-link" href="listProducts">Productos</a>
+                </li>
+                <li class="nav-item"></li>
+                <a class="nav-link" href="users">Usuarios</a>
                 </li>
                 {{/if}}
+
             </ul>
         </div>
         <div class="cart-container">

@@ -9,6 +9,7 @@ const {
     cart,
     loaddocuments,
     products,
+    listproducts,
     realtimeproducts,
     restablecer,
     resetpassword,
@@ -16,7 +17,13 @@ const {
     detailProduct,
     login,
     register,
-    updateuser
+    updateuser,
+    estilos,
+    bodegas,
+    historia,
+    premiados,
+    proxcatas,
+    factura
 } = new viewsController();
 
 const router = Router();
@@ -30,6 +37,8 @@ router.get('/users', passportCall('jwt'), authorization('admin'), users)
 router.get('/loaddocuments', loaddocuments)
 
 router.get('/products', products)
+
+router.get('/listProducts', listproducts)
 
 router.get('/detailProduct/:pid', detailProduct)
 
@@ -46,6 +55,19 @@ router.get('/restablecer', restablecer)
 router.get('/resetpassword', resetpassword)
 
 router.post('/updateuser/:uid', updateuser)
+
+router.get('/estilos', estilos)
+
+router.get('/bodegas', bodegas)
+
+router.get('/historia', historia)
+
+router.get('/premiados', premiados)
+
+router.get('/proximascatas', proxcatas)
+
+router.get('/factura', factura)
+
 
 //_____________Pruebas de Logger_______________
 router.get('/logger_warning',(req,res)=>{

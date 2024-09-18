@@ -39,23 +39,9 @@ for (var i = 0; i < images.length; i++) {
         var productId = this.getAttribute("data-id");
         var iframe =  document.getElementById("modalIframe");  
         iframe.src = `/detailProduct/${productId}`;
-        modal.style.display = "block";    
-
-        // Crear el carrito
-              
-      
+        modal.style.display = "block";     
     }
 }
-
-// for (var i = 0; i < images.length; i++) {
-//     images[i].onclick = function () {
-//         var productId = this.getAttribute("data-id");
-//         var iframe = document.getElementById("modalIframe");
-//         iframe.src = 'api/cart/create';
-//         iframe.src = `/detailProduct/${productId}`;        
-//         modal.style.display = "block";
-//     }
-// }
 
 window.onclick = function (event) {
     if (event.target == modal) {
@@ -84,5 +70,3 @@ function decrementar(precio, stock) {
         subtotalInput.value = precio * newValue;
     }
 }
-
-

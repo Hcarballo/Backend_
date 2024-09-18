@@ -33,9 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             const modal = document.getElementById('myModal');
             modal.style.display = 'none';
-            setTimeout(() => {
-                window.location.href = '/home';
-            }, 300);
+            
         });
     });
+});
+
+document.getElementById('fin-compra').addEventListener('click', function() {
+      
+    window.location.href = `/factura`;
 });

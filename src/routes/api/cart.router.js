@@ -7,7 +7,7 @@ const {
     getCartByID,
     addProductToCart,
     delProductToCart,
-    deleteCart
+    deleteCart,
 } = new CartController();
 
 const router = Router();

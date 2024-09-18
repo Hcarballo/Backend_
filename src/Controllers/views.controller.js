@@ -1,5 +1,6 @@
 import { parseJwt } from "../utils/jwt.js"
 import { productService, userService, cartService } from "../service/index.js";
+import { now } from "mongoose";
 
 class viewsController {
 
@@ -19,28 +20,32 @@ class viewsController {
     }
 
     users = async (req, res) => {
+        let dataInit = await this.configurationInit(req);
         const users = await userService.getUsers();
-        return res.render('users', { users });
+        return res.render('users', { users, dataInit });
     }
-    
+
     updateuser = async (req, res) => {
         try {
+            let dataInit = await this.configurationInit(req);
             const uid = req.params.uid;
             const user = await userService.getUser(uid);
-            return res.render('updateuser', { 
+            return res.render('updateuser', {
                 Nombre: user.first_name,
-                 Apellido: user.last_name, 
-                 Fecha_Nac: user.birthday,
-                 Foto_Perfil_URL: user.foto_perfil,
-                 Email:user.email,
-                 Role:user.role,
-                Checkpremium: user.checkPremium  });
+                Apellido: user.last_name,
+                Fecha_Nac: user.birthday,
+                Foto_Perfil_URL: user.foto_perfil,
+                Email: user.email,
+                Role: user.role,
+                Checkpremium: user.checkPremium,
+                dataInit
+            });
         } catch (error) {
             console.log(error);
             return res.status(500).send('Error interno del servidor');
         }
     }
-    
+
 
     cart = async (req, res) => {
         try {
@@ -83,9 +88,21 @@ class viewsController {
 
     products = async (req, res) => {
         try {
+            let dataInit = await this.configurationInit(req);
             const products = await productService.getProducts();
-            return res.render('products', { products });
-        } catch (error) {
+            return res.render('products', { products, dataInit });
+        } catch (error) { 
+            console.log(error);
+            return res.status(500).send('Error interno del servidor');
+        }
+    }
+
+    listproducts = async (req, res) => {
+        try {
+            let dataInit = await this.configurationInit(req);
+            const products = await productService.getProducts();
+            return res.render('listProducts', { products, dataInit });
+        } catch (error) { 
             console.log(error);
             return res.status(500).send('Error interno del servidor');
         }
@@ -94,6 +111,7 @@ class viewsController {
     detailProduct = async (req, res) => {
         try {
             let id = req.params.pid;
+            let dataInit = await this.configurationInit(req);
             const productDB = await productService.getProductsById(id);
             let cart = null;
             if (req.cookies.tokenCart) {
@@ -114,6 +132,7 @@ class viewsController {
                 categoria: productDB.categoria,
                 stock: productDB.stock,
                 status: productDB.status,
+                dataInit,
                 isModal
             });
         } catch (error) {
@@ -157,6 +176,51 @@ class viewsController {
         return res.render('resetpassword', { email });
     }
 
+    estilos = async (req,res)=>{
+        let dataInit = await this.configurationInit(req);
+        return res.render('estilos', {dataInit})
+    }
+
+    bodegas = async (req,res)=>{
+        let dataInit = await this.configurationInit(req);
+        return res.render('bodegas', {dataInit})
+    }
+
+    historia = async (req,res)=>{
+        let dataInit = await this.configurationInit(req);
+        return res.render('historia', {dataInit})
+    }
+
+    premiados = async (req,res)=>{
+        let dataInit = await this.configurationInit(req);
+        return res.render('premiados', {dataInit})
+    }
+
+    proxcatas = async (req,res)=>{
+        let dataInit = await this.configurationInit(req);
+        return res.render('proximascatas', {dataInit})
+    }
+
+    
+    factura = async (req, res) => {
+        try {
+            let dataInit = await this.configurationInit(req);
+            
+            if (!dataInit) {
+                res.send('Error');
+            }
+            else {
+                console.log(dataInit)
+                return res.render('factura', {dataInit});
+            }
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send('Error interno del servidor');
+        }
+    }
+
+
     configurationInit = async (req) => {
 
         const products = await productService.getProducts();
@@ -167,11 +231,13 @@ class viewsController {
             foto_perfil: null,
             role: null,
             checkrole: null,
+            birthday: null,
             carttoken: null,
             cart: null,
             total: 0,
             cartitem: 0,
-            products: products
+            products: products,
+            date: now()
         }
 
         if (req.cookies.token) {
@@ -181,6 +247,10 @@ class viewsController {
             cfg.uid = data.id;
             cfg.foto_perfil = data.foto_perfil;
             cfg.role = data.role;
+            if (cfg.role === 'admin') {
+                cfg.checkrole = 1;
+            };
+            cfg.birthday = data.birthday;
         }
 
         if (req.cookies.tokenCart) {
