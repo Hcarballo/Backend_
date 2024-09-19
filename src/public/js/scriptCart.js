@@ -14,11 +14,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    event.target.closest('tr').remove();
-                    window.location.href = '/home';
+                    event.target.closest('tr').remove();                    
                 } else {
                     console.error('Error al eliminar el producto');
                 }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const contCompraButtons = document.querySelectorAll('.cont-compra');
+
+    contCompraButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            const modal = document.querySelector('.modal'); // Selecciona el modal
+
+            try {
+                await fetch(`/home`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                // Cierra el modal
+                modal.style.display = 'none';
+
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -38,7 +62,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.getElementById('fin-compra').addEventListener('click', function() {
-      
-    window.location.href = `/factura`;
+document.addEventListener('DOMContentLoaded', () => {
+    const facturaButtons = document.querySelectorAll('.fin-compra');
+
+    facturaButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+         
+            try {
+                await fetch(`/factura`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
 });

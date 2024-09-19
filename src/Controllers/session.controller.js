@@ -4,6 +4,7 @@ import { generateToken } from "../utils/jwt.js";
 import { userService } from "../service/index.js";
 import UserController from "./users.controller.js";
 import { sendEmail } from "../utils/sendEmail.js";
+import moment from "moment";
 
 class SessionController {
     constructor() {
@@ -17,7 +18,7 @@ class SessionController {
             return res.status(401).send({ status: 'error', message: 'Datos incompletos' });
         }
 
-        const userFound = await this.service.getUserEmail(email);        
+        const userFound = await this.service.getUserEmail(email);
 
         if (!userFound) {
             return res.status(400).send({ status: 'error', error: 'Usuario no encontrado' })
@@ -58,14 +59,16 @@ class SessionController {
         if (userFound) {
             return res.status(401).send({ status: 'error', message: 'Usuario existente' });
         }
+
         const newUser = {
             first_name,
             last_name,
+            brithday: this.convertirFecha(date_born),
             age: userManager.edad(date_born),
-            email,            
+            email,
             last_connection: `Login - ${new Date().toLocaleString()}`,
             password: createHash(password)
-        }
+        };
 
         const result = await this.service.createUser(newUser);
 
@@ -80,7 +83,7 @@ class SessionController {
             first_name: result.first_name
         });
 
-        res.cookie('token', token, {
+       return res.cookie('token', token, {
             maxAge: 60 * 60 * 1000 * 24,
             httpOnly: true
         }).redirect('/home');
@@ -95,7 +98,7 @@ class SessionController {
         const tokenreset = generateToken({
             email,
         });
-        res.cookie('tokenreset', tokenreset, {
+        return res.cookie('tokenreset', tokenreset, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true
         });
@@ -153,6 +156,15 @@ class SessionController {
     funcPassport = async (req, res) => {
         return res.send('Datos sensibles');
     };
+
+    convertirFecha = (fechaISO) => {
+        const fecha = new Date(fechaISO);
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const anio = fecha.getFullYear();
+        
+        return `${dia}/${mes}/${anio}`;
+    }
 }
 
 export default SessionController;

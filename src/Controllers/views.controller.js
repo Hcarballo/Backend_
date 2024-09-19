@@ -220,7 +220,6 @@ class viewsController {
         }
     }
 
-
     configurationInit = async (req) => {
 
         const products = await productService.getProducts();

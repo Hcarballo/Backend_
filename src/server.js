@@ -18,6 +18,7 @@ import { objectConfig } from './config/index.js';
 import { sendMessages } from '../src/utils/sendMessages.js';
 import { addLogger } from './utils/logger.js';
 import { schedule } from 'node-cron';
+import moment from 'moment';
 
 const app = express();
 const httpServer = new ServerHttp(app);

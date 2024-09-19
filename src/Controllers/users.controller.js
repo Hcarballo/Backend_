@@ -37,6 +37,7 @@ class UserController {
             const newUser = {
                 first_name: first_name,
                 last_name: last_name,
+                brithday: date,
                 age: this.edad(date),
                 email: email,
                 last_connection: `Login - ${new Date().toLocaleString()}`,
