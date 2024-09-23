@@ -25,60 +25,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const contCompraButtons = document.querySelectorAll('.cont-compra');
-
-    contCompraButtons.forEach(button => {
-        button.addEventListener('click', async (event) => {
-            const modal = document.querySelector('.modal'); // Selecciona el modal
-
-            try {
-                await fetch(`/home`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                // Cierra el modal
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.cont-compra').addEventListener('click', function() {
+        // Selecciona todos los elementos con la clase 'modal' y los cierra
+        var modals = document.querySelectorAll('.modal');
+        if (modals.length > 0) {
+            modals.forEach(function(modal) {
                 modal.style.display = 'none';
-
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        });
+            });
+        } else {
+            console.error('No se encontraron modales abiertos');
+        }
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const continueButtons = document.querySelectorAll('.continuar-compra');
-    continueButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            event.preventDefault();
-            const modal = document.getElementById('myModal');
-            modal.style.display = 'none';
-            
+document.addEventListener('DOMContentLoaded', function() {
+    const finalizarCompraBtn = document.querySelector('.fin-compra');
+
+    if (finalizarCompraBtn) {
+        finalizarCompraBtn.addEventListener('click', function() {
+            window.location.href = '/factura';
         });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const facturaButtons = document.querySelectorAll('.fin-compra');
-
-    facturaButtons.forEach(button => {
-        button.addEventListener('click', async (event) => {
-         
-            try {
-                await fetch(`/factura`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        });
-    });
+    }
 });

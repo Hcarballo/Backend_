@@ -60,12 +60,12 @@ function incrementar(precio, stock) {
     }
 }
 
-function decrementar(precio, stock) {
+function decrementar(precio) {
     const cantidadInput = document.getElementById('quantity');
     const subtotalInput = document.getElementById('subtotal');
     const newValue = parseInt(cantidadInput.value) - 1;
 
-    if (newValue >= 0) {
+    if (newValue >= 1) {
         cantidadInput.value = newValue;
         subtotalInput.value = precio * newValue;
     }

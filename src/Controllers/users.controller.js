@@ -2,8 +2,6 @@ import { createHash } from "../utils/bcrypt.js";
 import { userService } from "../service/index.js";
 import { parse } from "date-fns";
 import { sendEmail } from "../utils/sendEmail.js";
-import { da } from "@faker-js/faker";
-import { use } from "chai";
 
 class UserController {
     constructor() {

@@ -12,6 +12,7 @@ body {
     margin: 0;
     padding: 2%;
     height: 100vh;
+    line-height: 120%;
     background: url(../image/Background_princ.webp) no-repeat center center fixed;
     background-size: cover;
 }
@@ -143,7 +144,7 @@ p {
 
 .cart-container p {
     margin: 0;
-    padding-left: 10px; /* Espacio entre el ID del carrito y el precio */
+    padding-left: 10px; 
 }
 
 .cart-total{
@@ -250,7 +251,7 @@ h2, .search-container {
     margin: 3% auto; 
     padding: 5px;
     border: 1px solid #888;
-    width: 80%; 
+    width: 80%;    
     max-width: 800px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);

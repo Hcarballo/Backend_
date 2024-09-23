@@ -12,23 +12,25 @@
                 <li><strong>Bodega:</strong> {{bodega }}</li>
                 <li><strong>Precio:</strong> {{ precio }}</li>
                 <li><strong>Categoría:</strong> {{categoria }}</li>
-                <li><strong>Stock:</strong> {{ stock }}</li>
-                <li><strong>Estado:</strong> {{ status }}</li>
+                <li><strong>Stock:</strong> {{ stock }}</li>               
             </ul>
 
             <form action="/api/cart/product" method="post" class="cart-form">
                 <input type="hidden" name="pid" id="pid" value="{{id}}">
+                 {{#if dataInit.first_name}}
                 <div class="quantity-subtotal">
                     <label>Cantidad:</label>
-                    <input type="number" name="quantity" id="quantity" value="0" min="0">
+                    <input type="number" name="quantity" id="quantity" value="1" min="1">
                     <label>Subtotal:</label>
-                    <input type="number" id="subtotal" value="0">
+                    <input type="number" id="subtotal" value={{precio}}>
                 </div>
+               
                 <div class="quantity-buttons">
                     <button type="button" onclick="incrementar({{this.precio}},{{this.stock}})">+</button>
                     <button type="button" onclick="decrementar({{this.precio}},{{this.stock}})">-</button>
                 </div>
                 <button type="submit">Agregar al carrito</button>
+                {{/if}}
             </form>
         </div>
     </div>

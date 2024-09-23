@@ -1,39 +1,38 @@
 <main>
     <div class="invoice-header">
         <h3>Factura de Compra</h3>
-        <h6>ID de Factura:{{id}}</h6>
+        <h6>ID de Factura: {{cid}}</h6>
     </div>
 
     <div class="invoice-details">
         <h6>Fecha: {{date}}</h6>
-        <h6>Cliente: {{first_name}}</h6>
+        <h6>Cliente: {{customer}}</h6>
     </div>
 
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col"> </th>
                 <th scope="col">Producto</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col">Precio U</th>
-                <th scope="col">Subtotal </th>
-                <th scope="col"> </th>
+                <th scope="col">Subtotal</th>
             </tr>
         </thead>
         <tbody>
-            {{#each cartitem}}
+            {{#each products}}
             <tr>
                 <th scope="row">{{@index}}</th>
-                <td>{{this.name}}</td>
-                <td>{{this.quantity}}</td>
-                <td>{{this.unitprice}}</td>
-                <td>{{this.subtotal}}</td>
+                <td>{{name}}</td>
+                <td>{{quantity}}</td>
+                <td>${{unitprice}}</td>
+                <td>${{subtotal}}</td>
             </tr>
             {{/each}}
+            <tr>
+                <td colspan="4" class="text-right"><strong>Total:</strong></td>
+                <td><strong>${{total}}</strong></td>
+            </tr>
         </tbody>
     </table>
-    <div class="invoice-total">
-        <span>{{total}}</span>
-    </div>
 </main>

@@ -73,12 +73,21 @@
             </ul>
         </div>
         <div class="cart-container">
+            {{#if dataInit.first_name}}
             <a href="/cart">
                 <img src="/image/products/carrito.jpg" alt="Carrito de compras" class="cart-button">
                 <span class="cart-count">{{dataInit.cartitem}}</span>
             </a>
             <span>-</span>
             <h4 class="cart-total">${{dataInit.total}}</h4>
+            {{else}}
+            <a href="/register">
+                <img src="/image/products/carrito.jpg" alt="Carrito de compras" class="cart-button">
+                <span class="cart-count">{{dataInit.cartitem}}</span>
+            </a>
+            <span>-</span>
+            <h4 class="cart-total">${{dataInit.total}}</h4>
+            {{/if}}
         </div>
     </nav>
 </header>

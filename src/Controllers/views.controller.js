@@ -9,7 +9,7 @@ class viewsController {
     home = async (req, res) => {
         try {
 
-            let dataInit = await this.configurationInit(req);
+            const dataInit = await this.configurationInit(req);
 
             return res.render('home', { dataInit });
 
@@ -91,7 +91,7 @@ class viewsController {
             let dataInit = await this.configurationInit(req);
             const products = await productService.getProducts();
             return res.render('products', { products, dataInit });
-        } catch (error) { 
+        } catch (error) {
             console.log(error);
             return res.status(500).send('Error interno del servidor');
         }
@@ -102,7 +102,7 @@ class viewsController {
             let dataInit = await this.configurationInit(req);
             const products = await productService.getProducts();
             return res.render('listProducts', { products, dataInit });
-        } catch (error) { 
+        } catch (error) {
             console.log(error);
             return res.status(500).send('Error interno del servidor');
         }
@@ -176,42 +176,50 @@ class viewsController {
         return res.render('resetpassword', { email });
     }
 
-    estilos = async (req,res)=>{
+    estilos = async (req, res) => {
         let dataInit = await this.configurationInit(req);
-        return res.render('estilos', {dataInit})
+        return res.render('estilos', { dataInit })
     }
 
-    bodegas = async (req,res)=>{
+    bodegas = async (req, res) => {
         let dataInit = await this.configurationInit(req);
-        return res.render('bodegas', {dataInit})
+        return res.render('bodegas', { dataInit })
     }
 
-    historia = async (req,res)=>{
+    historia = async (req, res) => {
         let dataInit = await this.configurationInit(req);
-        return res.render('historia', {dataInit})
+        return res.render('historia', { dataInit })
     }
 
-    premiados = async (req,res)=>{
+    premiados = async (req, res) => {
         let dataInit = await this.configurationInit(req);
-        return res.render('premiados', {dataInit})
+        return res.render('premiados', { dataInit })
     }
 
-    proxcatas = async (req,res)=>{
+    proxcatas = async (req, res) => {
         let dataInit = await this.configurationInit(req);
-        return res.render('proximascatas', {dataInit})
+        return res.render('proximascatas', { dataInit })
     }
 
-    
+
     factura = async (req, res) => {
         try {
-            let dataInit = await this.configurationInit(req);
-            
+            const dataInit = await this.configurationInit(req);
+            const cart = JSON.parse(JSON.stringify(dataInit.cart));
+            const isModal = 'true';
             if (!dataInit) {
                 res.send('Error');
             }
             else {
-                console.log(dataInit)
-                return res.render('factura', {dataInit});
+                return res.render('factura', {
+                    dataInit,
+                    date: dataInit.date,
+                    customer: dataInit.first_name,
+                    cid: cart._id,
+                    total: cart.total,
+                    products: cart.products,
+                    isModal
+                });
             }
 
         } catch (error) {
@@ -221,7 +229,12 @@ class viewsController {
     }
 
     configurationInit = async (req) => {
-
+        const fecha = new Date();
+        const formatfecha = fecha.toLocaleDateString('es-AR', {
+            year: "numeric",
+            month: '2-digit',
+            day: '2-digit'
+        });
         const products = await productService.getProducts();
 
         let cfg = {
@@ -236,7 +249,7 @@ class viewsController {
             total: 0,
             cartitem: 0,
             products: products,
-            date: now()
+            date: formatfecha
         }
 
         if (req.cookies.token) {
@@ -253,9 +266,9 @@ class viewsController {
         }
 
         if (req.cookies.tokenCart) {
-            const carttoken = parseJwt(req.cookies.tokenCart);
-            cfg.carttoken = carttoken;
-            cfg.cart = await cartService.getCartByID(carttoken.id);
+            const cartok = parseJwt(req.cookies.tokenCart);
+            cfg.carttoken = cartok;
+            cfg.cart = await cartService.getCartByID(cartok.id);
             cfg.total = cfg.cart.total;
             cfg.cartitem = cfg.cart.products.reduce((sum, product) => sum + product.quantity, 0);
         }

@@ -8,18 +8,21 @@
             {{#each dataInit.products}}
             <div class="product-item">
                 <p>Nombre: {{this.nombre}}</p>
-                <img src="{{this.imagen}}" alt="Imagen de {{this.nombre}}" class="product-image" data-id="{{this._id}}" />
+                <img src="{{this.imagen}}" alt="Imagen de {{this.nombre}}" class="product-image"
+                    data-id="{{this._id}}" />
                 <p>Uva: {{this.uva}}</p>
                 <p>Bodega: {{this.bodega}}</p>
                 <p>Precio: ${{this.precio}}</p>
                 {{#if this.stock}}
                 <h6 style="color: green;">Stock Disponible</h6>
+                {{#if dataInit.first_name}}
                 <form action="/detailProduct/{{this._id}}">
                     <button type="submit">Comprar</button>
                 </form>
+                {{/if}}
                 {{else}}
                 <h6 style="color: crimson;">Sin Stock</h6>
-                <button style="background-color: gray;" type="submit" disabled >-------</button>
+                <button style="background-color: gray;" type="submit" disabled>-------</button>
                 {{/if}}
             </div>
             {{/each}}
@@ -42,4 +45,3 @@
         <iframe id="modalIframe" src="" frameborder="0" style="width: 100%; height: 400px;"></iframe>
     </div>
 </div>
-

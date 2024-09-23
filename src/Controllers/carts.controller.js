@@ -1,6 +1,7 @@
 import ProductDao from "../daos/MONGO/productDao.js"
 import { cartService } from "../service/index.js";
 import { generateToken, parseJwt } from "../utils/jwt.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 const {
     getProductsById
@@ -23,26 +24,27 @@ class CartController {
     createCart = async (req, res) => {
         try {
             if (!req.cookies.tokenCart) {
-                let user = null;
+
                 if (req.cookies.token) {
                     const founduser = parseJwt(req.cookies.token);
-                    user = founduser.id;
-                }
-                const cart = {
-                    user: user,
-                    products: [],
-                    total: 0,
-                    status: "Pendiente"
-                }
-                const result = await this.cartService.createCart(cart);
+                    const user = founduser.id;
+                    const cart = {
+                        user: user,
+                        products: [],
+                        total: 0,
+                        status: "Pendiente"
+                    }
+                    const result = await this.cartService.createCart(cart);
 
-                const tokenCart = generateToken({
-                    id: result._id,
-                });
+                    const tokenCart = generateToken({
+                        id: result._id,
+                    });
 
-                res.cookie('tokenCart', tokenCart, {
-                    maxAge: 60 * 60 * 1000 * 24,
-                })
+                    res.cookie('tokenCart', tokenCart, {
+                        maxAge: 60 * 60 * 1000 * 24,
+                    })
+                }
+                return res.status(200).redirect('/home');;
             }
             res.status(200).json({ message: 'Carrito creado exitosamente' });
         } catch (error) {
@@ -153,6 +155,12 @@ class CartController {
             }
         });
     };
+
+    enviarfactura = async (req, res) => {
+
+        const html = '<h3></h3>'
+
+    }
 
 }
 
