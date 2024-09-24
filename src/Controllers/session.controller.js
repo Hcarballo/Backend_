@@ -4,7 +4,6 @@ import { generateToken } from "../utils/jwt.js";
 import { userService } from "../service/index.js";
 import UserController from "./users.controller.js";
 import { sendEmail } from "../utils/sendEmail.js";
-import moment from "moment";
 
 class SessionController {
     constructor() {
@@ -65,6 +64,7 @@ class SessionController {
             last_name,
             brithday: this.convertirFecha(date_born),
             age: userManager.edad(date_born),
+            foto_perfil: '/image/user/usuario.png',
             email,
             last_connection: `Login - ${new Date().toLocaleString()}`,
             password: createHash(password)

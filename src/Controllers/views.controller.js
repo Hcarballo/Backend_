@@ -8,7 +8,7 @@ class viewsController {
 
     home = async (req, res) => {
         try {
-
+            console.log('paseeee')
             const dataInit = await this.configurationInit(req);
 
             return res.render('home', { dataInit });
@@ -20,7 +20,7 @@ class viewsController {
     }
 
     users = async (req, res) => {
-        let dataInit = await this.configurationInit(req);
+        const dataInit = await this.configurationInit(req);
         const users = await userService.getUsers();
         return res.render('users', { users, dataInit });
     }

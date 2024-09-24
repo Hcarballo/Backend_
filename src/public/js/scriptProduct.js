@@ -46,6 +46,7 @@ for (var i = 0; i < images.length; i++) {
 window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
+        window.location.href = "/home";
     }
 }
 
