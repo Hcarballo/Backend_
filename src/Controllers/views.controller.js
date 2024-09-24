@@ -8,7 +8,7 @@ class viewsController {
 
     home = async (req, res) => {
         try {
-            console.log('paseeee')
+            
             const dataInit = await this.configurationInit(req);
 
             return res.render('home', { dataInit });
