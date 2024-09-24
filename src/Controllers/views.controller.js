@@ -8,10 +8,10 @@ class viewsController {
 
     home = async (req, res) => {
         try {
-            
-            const dataInit = await this.configurationInit(req);
 
-            return res.render('home', { dataInit });
+            const dataInit = await this.configurationInit(req);
+            const user = dataInit.first_name
+            return res.render('home', { dataInit, user });
 
         } catch (error) {
             console.log(error)
@@ -112,6 +112,9 @@ class viewsController {
         try {
             let id = req.params.pid;
             let dataInit = await this.configurationInit(req);
+            if (!dataInit.first_name) {
+                return res.render('register', { dataInit });
+            }
             const productDB = await productService.getProductsById(id);
             let cart = null;
             if (req.cookies.tokenCart) {

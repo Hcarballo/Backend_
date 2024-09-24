@@ -157,11 +157,21 @@ class CartController {
     };
 
     enviarfactura = async (req, res) => {
-
-        const html = '<h3></h3>'
-
+        try {
+            const cart = parseJwt(req.cookies.tokenCart);
+            const foundCart = await this.cartService.getCartByID(cart.id);
+            if (foundCart) {
+                foundCart.status = 'Finalizado';
+                await this.cartService.updatecart(cart.id, foundCart);
+            }
+            if (req.cookies.tokenCart) {
+                res.clearCookie('tokenCart');
+            }
+            return res.status(200).redirect('/home');
+        } catch (error) {
+            console.log(error);
+        }
     }
-
 }
 
 export default CartController;

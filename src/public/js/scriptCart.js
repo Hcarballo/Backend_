@@ -48,3 +48,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const enviarCorreoBtn = document.querySelector('.env-correo');
+
+    if (enviarCorreoBtn) {
+        enviarCorreoBtn.addEventListener('click', () => {
+            window.location.href = '/api/cart/cart/enviarfactura';
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const enviarCorreoBtn = document.querySelector('.volver');
+
+    if (enviarCorreoBtn) {
+        enviarCorreoBtn.addEventListener('click', () => {
+            window.location.href = '/home';
+        });
+    }
+});
+
